@@ -1,7 +1,40 @@
+
 //? Maps
 function clone(array: any[]) {
   return JSON.parse(JSON.stringify(array));
 }
+
+function humano(board: number[][]): any {
+  let posicaoDestino = undefined;
+  let posicaoOrigem = undefined;
+
+
+  while(!posicaoOrigem) {
+    console.log("Digite a posição da peça que deseja mover ou 's' pra desistir e sair: ");
+    posicaoOrigem = prompt();
+
+      if(posicaoOrigem === 's') {
+        console.log("Saindo...");
+        process.exit();
+      }
+  }
+
+  while (!posicaoDestino) { 
+
+    console.log("Digite a posição que você deseja que a peça vá ou 's' para desistir e sair: ");
+    posicaoDestino = prompt();
+
+    if(posicaoDestino === 's') {
+      console.log("Saindo...");
+      process.exit();
+    }
+  }
+
+    const [linhaOrigem, colunaOrigem] = Positions[posicaoOrigem];
+
+    return [board[linhaOrigem][colunaOrigem], Positions[posicaoOrigem], Positions[posicaoDestino]];
+}
+
 
 const Jogador: Record<string, number> = {
   w: 0,
@@ -1230,9 +1263,11 @@ let checkPossiveisJogadasByPiece: any[] = [];
 checkPossiveisJogadasByPiece[Pieces["wP"]] = (
   boardC: number[][],
   linha: number,
-  coluna: number
+  coluna: number,
+  returnPositionAttacked: boolean,
 ) => {
   let jogadasPossiveis = [];
+  let casasAtacadas = [];
   let boardCCopy = clone(boardC);
 
   const canMoveCimaOne = movimentar(
@@ -1244,6 +1279,7 @@ checkPossiveisJogadasByPiece[Pieces["wP"]] = (
 
   if (canMoveCimaOne) {
     jogadasPossiveis.push(boardCCopy);
+    casasAtacadas.push([linha + 1, coluna])
   }
 
   boardCCopy = clone(boardC);
@@ -1257,6 +1293,7 @@ checkPossiveisJogadasByPiece[Pieces["wP"]] = (
 
   if (canMoveCimaTwo) {
     jogadasPossiveis.push(boardCCopy);
+    casasAtacadas.push([linha + 2, coluna])
   }
 
   boardCCopy = clone(boardC);
@@ -1270,6 +1307,7 @@ checkPossiveisJogadasByPiece[Pieces["wP"]] = (
 
   if (canMoveDiagonalDireita) {
     jogadasPossiveis.push(boardCCopy);
+    casasAtacadas.push([linha + 1, coluna + 1])
   }
 
   boardCCopy = clone(boardC);
@@ -1283,17 +1321,20 @@ checkPossiveisJogadasByPiece[Pieces["wP"]] = (
 
   if (canMoveDiagonalEsquerda) {
     jogadasPossiveis.push(boardCCopy);
+    casasAtacadas.push([linha + 1, coluna - 1])
   }
 
-  return jogadasPossiveis;
+  return returnPositionAttacked? casasAtacadas : jogadasPossiveis;
 };
 
 checkPossiveisJogadasByPiece[Pieces["bP"]] = (
   boardC: number[][],
   linha: number,
-  coluna: number
+  coluna: number,
+  returnPositionAttacked: boolean,
 ) => {
   let jogadasPossiveis = [];
+  let casasAtacadas = [];
   let boardCCopy = clone(boardC);
 
   const canMoveCimaOne = movimentar(
@@ -1305,6 +1346,7 @@ checkPossiveisJogadasByPiece[Pieces["bP"]] = (
 
   if (canMoveCimaOne) {
     jogadasPossiveis.push(boardCCopy);
+    casasAtacadas.push([linha - 1, coluna])
   }
 
   boardCCopy = clone(boardC);
@@ -1318,6 +1360,7 @@ checkPossiveisJogadasByPiece[Pieces["bP"]] = (
 
   if (canMoveCimaTwo) {
     jogadasPossiveis.push(boardCCopy);
+    casasAtacadas.push([linha - 2, coluna])
   }
 
   boardCCopy = clone(boardC);
@@ -1331,6 +1374,7 @@ checkPossiveisJogadasByPiece[Pieces["bP"]] = (
 
   if (canMoveDiagonalDireita) {
     jogadasPossiveis.push(boardCCopy);
+    casasAtacadas.push([linha - 1, coluna - 1])
   }
 
   boardCCopy = clone(boardC);
@@ -1344,17 +1388,20 @@ checkPossiveisJogadasByPiece[Pieces["bP"]] = (
 
   if (canMoveDiagonalEsquerda) {
     jogadasPossiveis.push(boardCCopy);
+    casasAtacadas.push([linha - 1, coluna + 1])
   }
 
-  return jogadasPossiveis;
+  return returnPositionAttacked? casasAtacadas : jogadasPossiveis;
 };
 
 checkPossiveisJogadasByPiece[Pieces["wC"]] = (
   boardC: number[][],
   linha: number,
-  coluna: number
+  coluna: number,
+  returnPositionAttacked: boolean,
 ) => {
   let jogadasPossiveis = [];
+  let casasAtacadas = [];
   let boardCCopy = clone(boardC);
 
   let canMoveDireitaCima = movimentar(
@@ -1366,6 +1413,7 @@ checkPossiveisJogadasByPiece[Pieces["wC"]] = (
 
   if (canMoveDireitaCima) {
     jogadasPossiveis.push(boardCCopy);
+    casasAtacadas.push([linha + 2, coluna + 1])
   }
 
   boardCCopy = clone(boardC);
@@ -1379,6 +1427,7 @@ checkPossiveisJogadasByPiece[Pieces["wC"]] = (
 
   if (canMoveDireitaCima) {
     jogadasPossiveis.push(boardCCopy);
+    casasAtacadas.push([linha + 1, coluna + 2])
   }
 
   boardCCopy = clone(boardC);
@@ -1392,6 +1441,7 @@ checkPossiveisJogadasByPiece[Pieces["wC"]] = (
 
   if (canMoveEsquerdaCima) {
     jogadasPossiveis.push(boardCCopy);
+    casasAtacadas.push([linha + 1, coluna - 2])
   }
 
   boardCCopy = clone(boardC);
@@ -1405,6 +1455,7 @@ checkPossiveisJogadasByPiece[Pieces["wC"]] = (
 
   if (canMoveEsquerdaCima) {
     jogadasPossiveis.push(boardCCopy);
+    casasAtacadas.push([linha + 2, coluna - 1])
   }
 
   boardCCopy = clone(boardC);
@@ -1418,6 +1469,7 @@ checkPossiveisJogadasByPiece[Pieces["wC"]] = (
 
   if (canMoveEsquerdaBaixo) {
     jogadasPossiveis.push(boardCCopy);
+    casasAtacadas.push([linha - 2, coluna - 1])
   }
 
   boardCCopy = clone(boardC);
@@ -1431,6 +1483,7 @@ checkPossiveisJogadasByPiece[Pieces["wC"]] = (
 
   if (canMoveEsquerdaBaixo) {
     jogadasPossiveis.push(boardCCopy);
+    casasAtacadas.push([linha - 1, coluna - 2])
   }
 
   boardCCopy = clone(boardC);
@@ -1444,6 +1497,7 @@ checkPossiveisJogadasByPiece[Pieces["wC"]] = (
 
   if (canMoveDireitaBaixo) {
     jogadasPossiveis.push(boardCCopy);
+    casasAtacadas.push([linha - 1, coluna + 2])
   }
 
   boardCCopy = clone(boardC);
@@ -1457,17 +1511,20 @@ checkPossiveisJogadasByPiece[Pieces["wC"]] = (
 
   if (canMoveDireitaBaixo) {
     jogadasPossiveis.push(boardCCopy);
+    casasAtacadas.push([linha - 2, coluna + 1])
   }
 
-  return jogadasPossiveis;
+  return returnPositionAttacked? casasAtacadas : jogadasPossiveis;
 };
 
 checkPossiveisJogadasByPiece[Pieces["bC"]] = (
   boardC: number[][],
   linha: number,
-  coluna: number
+  coluna: number,
+  returnPositionAttacked: boolean,
 ) => {
   let jogadasPossiveis = [];
+  let casasAtacadas = [];
   let boardCCopy = clone(boardC);
 
   let canMoveDireitaCima = movimentar(
@@ -1479,6 +1536,7 @@ checkPossiveisJogadasByPiece[Pieces["bC"]] = (
 
   if (canMoveDireitaCima) {
     jogadasPossiveis.push(boardCCopy);
+    casasAtacadas.push([linha + 2, coluna + 1])
   }
 
   boardCCopy = clone(boardC);
@@ -1492,6 +1550,7 @@ checkPossiveisJogadasByPiece[Pieces["bC"]] = (
 
   if (canMoveDireitaCima) {
     jogadasPossiveis.push(boardCCopy);
+    casasAtacadas.push([linha + 1, coluna + 2])
   }
 
   boardCCopy = clone(boardC);
@@ -1505,6 +1564,7 @@ checkPossiveisJogadasByPiece[Pieces["bC"]] = (
 
   if (canMoveEsquerdaCima) {
     jogadasPossiveis.push(boardCCopy);
+    casasAtacadas.push([linha + 1, coluna - 2])
   }
 
   boardCCopy = clone(boardC);
@@ -1518,6 +1578,7 @@ checkPossiveisJogadasByPiece[Pieces["bC"]] = (
 
   if (canMoveEsquerdaCima) {
     jogadasPossiveis.push(boardCCopy);
+    casasAtacadas.push([linha + 2, coluna - 1])
   }
 
   boardCCopy = clone(boardC);
@@ -1531,6 +1592,7 @@ checkPossiveisJogadasByPiece[Pieces["bC"]] = (
 
   if (canMoveEsquerdaBaixo) {
     jogadasPossiveis.push(boardCCopy);
+    casasAtacadas.push([linha - 2, coluna - 1])
   }
 
   boardCCopy = clone(boardC);
@@ -1544,6 +1606,7 @@ checkPossiveisJogadasByPiece[Pieces["bC"]] = (
 
   if (canMoveEsquerdaBaixo) {
     jogadasPossiveis.push(boardCCopy);
+    casasAtacadas.push([linha - 1, coluna - 2])
   }
 
   boardCCopy = clone(boardC);
@@ -1557,6 +1620,7 @@ checkPossiveisJogadasByPiece[Pieces["bC"]] = (
 
   if (canMoveDireitaBaixo) {
     jogadasPossiveis.push(boardCCopy);
+    casasAtacadas.push([linha - 1, coluna + 2])
   }
 
   boardCCopy = clone(boardC);
@@ -1570,17 +1634,20 @@ checkPossiveisJogadasByPiece[Pieces["bC"]] = (
 
   if (canMoveDireitaBaixo) {
     jogadasPossiveis.push(boardCCopy);
+    casasAtacadas.push([linha - 2, coluna + 1])
   }
 
-  return jogadasPossiveis;
+  return returnPositionAttacked? casasAtacadas : jogadasPossiveis;
 };
 
 checkPossiveisJogadasByPiece[Pieces["wR"]] = (
   boardC: number[][],
   linha: number,
-  coluna: number
+  coluna: number,
+  returnPositionAttacked: boolean,
 ) => {
   let jogadasPossiveis = [];
+  let casasAtacadas = [];
   let boardCCopy = clone(boardC);
 
   let canMoveCima = movimentar(
@@ -1592,6 +1659,7 @@ checkPossiveisJogadasByPiece[Pieces["wR"]] = (
 
   if (canMoveCima) {
     jogadasPossiveis.push(boardCCopy);
+    casasAtacadas.push([linha + 1, coluna])
   }
 
   boardCCopy = clone(boardC);
@@ -1605,6 +1673,7 @@ checkPossiveisJogadasByPiece[Pieces["wR"]] = (
 
   if (canMoveBaixo) {
     jogadasPossiveis.push(boardCCopy);
+    casasAtacadas.push([linha - 1, coluna])
   }
 
   boardCCopy = clone(boardC);
@@ -1618,6 +1687,7 @@ checkPossiveisJogadasByPiece[Pieces["wR"]] = (
 
   if (canMoveEsquerda) {
     jogadasPossiveis.push(boardCCopy);
+    casasAtacadas.push([linha, coluna - 1])
   }
 
   boardCCopy = clone(boardC);
@@ -1631,6 +1701,7 @@ checkPossiveisJogadasByPiece[Pieces["wR"]] = (
 
   if (canMoveDireita) {
     jogadasPossiveis.push(boardCCopy);
+    casasAtacadas.push([linha, coluna + 1])
   }
 
   boardCCopy = clone(boardC);
@@ -1644,6 +1715,7 @@ checkPossiveisJogadasByPiece[Pieces["wR"]] = (
 
   if (canMoveDiagonalDireitaCima) {
     jogadasPossiveis.push(boardCCopy);
+    casasAtacadas.push([linha + 1, coluna + 1])
   }
 
   boardCCopy = clone(boardC);
@@ -1657,6 +1729,7 @@ checkPossiveisJogadasByPiece[Pieces["wR"]] = (
 
   if (canMoveDiagonalDireitaBaixo) {
     jogadasPossiveis.push(boardCCopy);
+    casasAtacadas.push([linha - 1, coluna + 1])
   }
 
   boardCCopy = clone(boardC);
@@ -1670,6 +1743,7 @@ checkPossiveisJogadasByPiece[Pieces["wR"]] = (
 
   if (canMoveDiagonalEsquerdaCima) {
     jogadasPossiveis.push(boardCCopy);
+    casasAtacadas.push([linha + 1, coluna - 1])
   }
 
   boardCCopy = clone(boardC);
@@ -1683,17 +1757,20 @@ checkPossiveisJogadasByPiece[Pieces["wR"]] = (
 
   if (canMoveDiagonalEsquerdaBaixo) {
     jogadasPossiveis.push(boardCCopy);
+    casasAtacadas.push([linha - 1, coluna - 1])
   }
 
-  return jogadasPossiveis;
+  return returnPositionAttacked? casasAtacadas : jogadasPossiveis;
 };
 
 checkPossiveisJogadasByPiece[Pieces["bR"]] = (
   boardC: number[][],
   linha: number,
-  coluna: number
+  coluna: number,
+  returnPositionAttacked: boolean,
 ) => {
   let jogadasPossiveis = [];
+  let casasAtacadas = [];
   let boardCCopy = clone(boardC);
 
   let canMoveCima = movimentar(
@@ -1705,6 +1782,7 @@ checkPossiveisJogadasByPiece[Pieces["bR"]] = (
 
   if (canMoveCima) {
     jogadasPossiveis.push(boardCCopy);
+    casasAtacadas.push([linha + 1, coluna])
   }
 
   boardCCopy = clone(boardC);
@@ -1718,6 +1796,7 @@ checkPossiveisJogadasByPiece[Pieces["bR"]] = (
 
   if (canMoveBaixo) {
     jogadasPossiveis.push(boardCCopy);
+    casasAtacadas.push([linha - 1, coluna])
   }
 
   boardCCopy = clone(boardC);
@@ -1731,6 +1810,7 @@ checkPossiveisJogadasByPiece[Pieces["bR"]] = (
 
   if (canMoveEsquerda) {
     jogadasPossiveis.push(boardCCopy);
+    casasAtacadas.push([linha, coluna - 1])
   }
 
   boardCCopy = clone(boardC);
@@ -1744,6 +1824,7 @@ checkPossiveisJogadasByPiece[Pieces["bR"]] = (
 
   if (canMoveDireita) {
     jogadasPossiveis.push(boardCCopy);
+    casasAtacadas.push([linha, coluna + 1])
   }
 
   boardCCopy = clone(boardC);
@@ -1757,6 +1838,7 @@ checkPossiveisJogadasByPiece[Pieces["bR"]] = (
 
   if (canMoveDiagonalDireitaCima) {
     jogadasPossiveis.push(boardCCopy);
+    casasAtacadas.push([linha + 1, coluna + 1])
   }
 
   boardCCopy = clone(boardC);
@@ -1770,6 +1852,7 @@ checkPossiveisJogadasByPiece[Pieces["bR"]] = (
 
   if (canMoveDiagonalDireitaBaixo) {
     jogadasPossiveis.push(boardCCopy);
+    casasAtacadas.push([linha - 1, coluna + 1])
   }
 
   boardCCopy = clone(boardC);
@@ -1783,6 +1866,7 @@ checkPossiveisJogadasByPiece[Pieces["bR"]] = (
 
   if (canMoveDiagonalEsquerdaCima) {
     jogadasPossiveis.push(boardCCopy);
+    casasAtacadas.push([linha + 1, coluna - 1])
   }
 
   boardCCopy = clone(boardC);
@@ -1796,18 +1880,21 @@ checkPossiveisJogadasByPiece[Pieces["bR"]] = (
 
   if (canMoveDiagonalEsquerdaBaixo) {
     jogadasPossiveis.push(boardCCopy);
+    casasAtacadas.push([linha - 1, coluna - 1])
   }
 
-  return jogadasPossiveis;
+  return returnPositionAttacked? casasAtacadas : jogadasPossiveis;
 };
 
 checkPossiveisJogadasByPiece[Pieces["wT"]] = (
   boardC: number[][],
   linha: number,
-  coluna: number
+  coluna: number,
+  returnPositionAttacked: boolean,
 ) => {
   
   let jogadasPossiveis = [];
+  let casasAtacadas = [];
   let boardCCopy = clone(boardC);
 
   let canMove;
@@ -1822,6 +1909,7 @@ checkPossiveisJogadasByPiece[Pieces["wT"]] = (
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
+      casasAtacadas.push([li, coluna])
       boardCCopy = clone(boardC);
     } else {
       break;
@@ -1842,6 +1930,7 @@ checkPossiveisJogadasByPiece[Pieces["wT"]] = (
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
+      casasAtacadas.push([li, coluna])
       boardCCopy = clone(boardC);
     } else {
       break;
@@ -1862,6 +1951,7 @@ checkPossiveisJogadasByPiece[Pieces["wT"]] = (
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
+      casasAtacadas.push([linha, co])
       boardCCopy = clone(boardC);
     } else {
       break;
@@ -1882,6 +1972,7 @@ checkPossiveisJogadasByPiece[Pieces["wT"]] = (
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
+      casasAtacadas.push([linha, co])
       boardCCopy = clone(boardC);
     } else {
       break;
@@ -1890,15 +1981,17 @@ checkPossiveisJogadasByPiece[Pieces["wT"]] = (
     boardCCopy = clone(boardC);
   }
 
-  return jogadasPossiveis;
+  return returnPositionAttacked? casasAtacadas : jogadasPossiveis;
 };
 
 checkPossiveisJogadasByPiece[Pieces["bT"]] = (
   boardC: number[][],
   linha: number,
-  coluna: number
+  coluna: number,
+  returnPositionAttacked: boolean,
 ) => {
   let jogadasPossiveis = [];
+  let casasAtacadas = [];
   let boardCCopy = clone(boardC);
 
   let canMove;
@@ -1913,6 +2006,7 @@ checkPossiveisJogadasByPiece[Pieces["bT"]] = (
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
+      casasAtacadas.push([li, coluna])
     } else {
       break;
     }
@@ -1932,6 +2026,7 @@ checkPossiveisJogadasByPiece[Pieces["bT"]] = (
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
+      casasAtacadas.push([li, coluna])
     } else {
       break;
     }
@@ -1951,6 +2046,7 @@ checkPossiveisJogadasByPiece[Pieces["bT"]] = (
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
+      casasAtacadas.push([linha, co])
     } else {
       break;
     }
@@ -1970,6 +2066,7 @@ checkPossiveisJogadasByPiece[Pieces["bT"]] = (
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
+      casasAtacadas.push([linha, co])
     } else {
       break;
     }
@@ -1977,15 +2074,17 @@ checkPossiveisJogadasByPiece[Pieces["bT"]] = (
     boardCCopy = clone(boardC);
   }
 
-  return jogadasPossiveis;
+  return returnPositionAttacked? casasAtacadas : jogadasPossiveis;
 };
 
 checkPossiveisJogadasByPiece[Pieces["wB"]] = (
   boardC: number[][],
   linha: number,
-  coluna: number
+  coluna: number,
+  returnPositionAttacked: boolean,
 ) => {
   let jogadasPossiveis = [];
+  let casasAtacadas = [];
   let boardCCopy = clone(boardC);
 
   let canMove;
@@ -1997,6 +2096,7 @@ checkPossiveisJogadasByPiece[Pieces["wB"]] = (
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
+      casasAtacadas.push([li, co])
       boardCCopy = clone(boardC);
     } else {
       break;
@@ -2016,6 +2116,7 @@ checkPossiveisJogadasByPiece[Pieces["wB"]] = (
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
+      casasAtacadas.push([li, co])
       boardCCopy = clone(boardC);
     } else {
       break;
@@ -2035,6 +2136,7 @@ checkPossiveisJogadasByPiece[Pieces["wB"]] = (
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
+      casasAtacadas.push([li, co])
       boardCCopy = clone(boardC);
     } else {
       break;
@@ -2054,6 +2156,7 @@ checkPossiveisJogadasByPiece[Pieces["wB"]] = (
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
+      casasAtacadas.push([li, co])
       boardCCopy = clone(boardC);
     } else {
       break;
@@ -2063,15 +2166,17 @@ checkPossiveisJogadasByPiece[Pieces["wB"]] = (
     co--;
   }
 
-  return jogadasPossiveis;
+  return returnPositionAttacked? casasAtacadas : jogadasPossiveis;
 };
 
 checkPossiveisJogadasByPiece[Pieces["bB"]] = (
   boardC: number[][],
   linha: number,
-  coluna: number
+  coluna: number,
+  returnPositionAttacked: boolean,
 ) => {
   let jogadasPossiveis = [];
+  let casasAtacadas = [];
   let boardCCopy = clone(boardC);
 
   let canMove;
@@ -2083,6 +2188,7 @@ checkPossiveisJogadasByPiece[Pieces["bB"]] = (
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
+      casasAtacadas.push([li, co])
       boardCCopy = clone(boardC);
     } else {
       break;
@@ -2102,6 +2208,7 @@ checkPossiveisJogadasByPiece[Pieces["bB"]] = (
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
+      casasAtacadas.push([li, co])
       boardCCopy = clone(boardC);
     } else {
       break;
@@ -2121,6 +2228,7 @@ checkPossiveisJogadasByPiece[Pieces["bB"]] = (
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
+      casasAtacadas.push([li, co])
       boardCCopy = clone(boardC);
     } else {
       break;
@@ -2140,6 +2248,7 @@ checkPossiveisJogadasByPiece[Pieces["bB"]] = (
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
+      casasAtacadas.push([li, co])
       boardCCopy = clone(boardC);
     } else {
       break;
@@ -2149,15 +2258,17 @@ checkPossiveisJogadasByPiece[Pieces["bB"]] = (
     co--;
   }
 
-  return jogadasPossiveis;
+  return returnPositionAttacked? casasAtacadas : jogadasPossiveis;
 };
 
 checkPossiveisJogadasByPiece[Pieces["wQ"]] = (
   boardC: number[][],
   linha: number,
-  coluna: number
+  coluna: number,
+  returnPositionAttacked: boolean,
 ) => {
   let jogadasPossiveis: number[][][] = [];
+  let casasAtacadas = [];
   let boardCCopy = clone(boardC);
 
   let canMove;
@@ -2171,6 +2282,7 @@ checkPossiveisJogadasByPiece[Pieces["wQ"]] = (
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
+      casasAtacadas.push([li, coluna])
       boardCCopy = clone(boardC);
     } else {
       break;
@@ -2191,6 +2303,7 @@ checkPossiveisJogadasByPiece[Pieces["wQ"]] = (
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
+      casasAtacadas.push([li, coluna])
       boardCCopy = clone(boardC);
     } else {
       break;
@@ -2211,6 +2324,7 @@ checkPossiveisJogadasByPiece[Pieces["wQ"]] = (
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
+      casasAtacadas.push([linha, co])
       boardCCopy = clone(boardC);
     } else {
       break;
@@ -2231,6 +2345,7 @@ checkPossiveisJogadasByPiece[Pieces["wQ"]] = (
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
+      casasAtacadas.push([linha, co])
       boardCCopy = clone(boardC);
     } else {
       break;
@@ -2247,6 +2362,7 @@ checkPossiveisJogadasByPiece[Pieces["wQ"]] = (
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
+      casasAtacadas.push([li, co])
       boardCCopy = clone(boardC);
     } else {
       break;
@@ -2266,6 +2382,7 @@ checkPossiveisJogadasByPiece[Pieces["wQ"]] = (
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
+      casasAtacadas.push([li, co])
       boardCCopy = clone(boardC);
     } else {
       break;
@@ -2285,6 +2402,7 @@ checkPossiveisJogadasByPiece[Pieces["wQ"]] = (
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
+      casasAtacadas.push([li, co])
       boardCCopy = clone(boardC);
     } else {
       break;
@@ -2304,6 +2422,7 @@ checkPossiveisJogadasByPiece[Pieces["wQ"]] = (
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
+      casasAtacadas.push([li, co])
       boardCCopy = clone(boardC);
     } else {
       break;
@@ -2313,15 +2432,17 @@ checkPossiveisJogadasByPiece[Pieces["wQ"]] = (
     co--;
   }
 
-  return jogadasPossiveis;
+  return returnPositionAttacked? casasAtacadas : jogadasPossiveis;
 };
 
 checkPossiveisJogadasByPiece[Pieces["bQ"]] = (
   boardC: number[][],
   linha: number,
-  coluna: number
+  coluna: number,
+  returnPositionAttacked: boolean,
 ) => {
   let jogadasPossiveis: number[][][] = [];
+  let casasAtacadas = [];
   let boardCCopy = clone(boardC);
 
   let canMove;
@@ -2335,6 +2456,7 @@ checkPossiveisJogadasByPiece[Pieces["bQ"]] = (
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
+      casasAtacadas.push([li, coluna])
       boardCCopy = clone(boardC);
     } else {
       break;
@@ -2355,6 +2477,7 @@ checkPossiveisJogadasByPiece[Pieces["bQ"]] = (
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
+      casasAtacadas.push([li, coluna])
       boardCCopy = clone(boardC);
     } else {
       break;
@@ -2375,6 +2498,7 @@ checkPossiveisJogadasByPiece[Pieces["bQ"]] = (
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
+      casasAtacadas.push([linha, co])
       boardCCopy = clone(boardC);
     } else {
       break;
@@ -2395,6 +2519,7 @@ checkPossiveisJogadasByPiece[Pieces["bQ"]] = (
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
+      casasAtacadas.push([linha, co])
       boardCCopy = clone(boardC);
     } else {
       break;
@@ -2411,6 +2536,7 @@ checkPossiveisJogadasByPiece[Pieces["bQ"]] = (
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
+      casasAtacadas.push([li, co])
       boardCCopy = clone(boardC);
     } else {
       break;
@@ -2430,6 +2556,7 @@ checkPossiveisJogadasByPiece[Pieces["bQ"]] = (
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
+      casasAtacadas.push([li, co])
       boardCCopy = clone(boardC);
     } else {
       break;
@@ -2449,6 +2576,7 @@ checkPossiveisJogadasByPiece[Pieces["bQ"]] = (
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
+      casasAtacadas.push([li, co])
       boardCCopy = clone(boardC);
     } else {
       break;
@@ -2468,6 +2596,7 @@ checkPossiveisJogadasByPiece[Pieces["bQ"]] = (
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
+      casasAtacadas.push([li, co])
       boardCCopy = clone(boardC);
     } else {
       break;
@@ -2477,32 +2606,37 @@ checkPossiveisJogadasByPiece[Pieces["bQ"]] = (
     co--;
   }
 
-  return jogadasPossiveis;
+  return returnPositionAttacked? casasAtacadas : jogadasPossiveis;
 };
 
-function checkPossiveisNos(boardC: number[][], jogador: number) {
-  let jogadasPossiveis: number[][][] = [];
+interface OptionsCheckPossiveisNos {
+  returnPositionAttacked: boolean;
+}
+
+function checkPossiveisNos(board: number[][], jogador: number, options?: OptionsCheckPossiveisNos): number[][][] | [number, number][] {
+  let jogadasPossiveis = [];
 
 
   for (let linha = 0; linha < 12; linha++) {
     for (let coluna = 0; coluna < 12; coluna++) {
-      if (boardC[linha][coluna] < 1) {
+      if (board[linha][coluna] < 1) {
         continue;
       }
 
-      if(boardC[linha][coluna] > 6 && jogador == 0) {
+      if(board[linha][coluna] > 6 && jogador == 0) {
         continue;
       }
 
-      if(boardC[linha][coluna] > 0 && boardC[linha][coluna] < 7 && jogador == 1) {
+      if(board[linha][coluna] > 0 && board[linha][coluna] < 7 && jogador == 1) {
         continue;
       }
-    
+      
       jogadasPossiveis.push(
-        ...checkPossiveisJogadasByPiece[boardC[linha][coluna]](
-          boardC,
+        ...checkPossiveisJogadasByPiece[board[linha][coluna]](
+          board,
           linha,
-          coluna
+          coluna,
+          options?.returnPositionAttacked,
         )
       );
     }
@@ -2511,19 +2645,138 @@ function checkPossiveisNos(boardC: number[][], jogador: number) {
   return jogadasPossiveis;
 }
 
-//? Main
+function checkXeque(board: number[][], jogadorAtual: number) {
 
-newGame();
+  const jogadorOposto = jogadorAtual === Jogador["w"]? Jogador["b"] : Jogador["w"];
+  let hasRei = 0;
+  let positionRei: [number, number] = [NaN, NaN];
 
-movimentar(boardC, Pieces["wP"], Positions["e2"], Positions["e4"])
+  for (let linha = 0; linha < 12; linha++) {
+    for (let coluna = 0; coluna < 12; coluna++) {
+          if(jogadorOposto === Jogador["w"] && board[linha][coluna] === Pieces["wR"]) {
+            positionRei = [linha, coluna];
+            hasRei++;
+            break;
+          }
 
-let nodes = checkPossiveisNos(boardC, Jogador["w"]);
+          if(jogadorOposto === Jogador["b"] && board[linha][coluna] === Pieces["bR"]) {
+            positionRei = [linha, coluna];
+            hasRei++;
+            break;
+          }
+      } 
 
-for(const node of nodes) {
-  printBoard(node);
+      if(hasRei) {
+        break;
+      }
+    }
+    
+  const positionAtacadas = checkPossiveisNos(board, jogadorAtual, {
+    returnPositionAttacked: true,
+  });
+
+  const [linhaRei, colunaRei] = positionRei;
+
+  for(const positionAtacada of positionAtacadas) {
+    const [linhaAtacada, colunaAtacada] = positionAtacada;
+
+    if(linhaAtacada === linhaRei && colunaAtacada === colunaRei) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
-console.log(nodes.length);
+function checkXequeMate(board: number[][], jogadorAtual: number) {
+
+  const isCheck = checkXeque(board, jogadorAtual)
+
+  if(!isCheck) {
+    return false;
+  }
+
+  const jogadorOposto = jogadorAtual === Jogador["w"]? Jogador["b"] : Jogador["w"];
+
+  const jogadasPossiveis = checkPossiveisNos(board, jogadorOposto);
+
+  for(const jogadaPossivel of jogadasPossiveis) {
+    const isCheckAgain =  checkXeque(jogadaPossivel as number[][], jogadorAtual);
+
+    if(!isCheckAgain) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+newGame();
+printBoard();
+movimentar(boardC, Pieces["wP"], Positions["f2"], Positions["f3"]); printBoard();
+movimentar(boardC, Pieces["bP"], Positions["e7"], Positions["e6"]); printBoard();
+movimentar(boardC, Pieces["wP"], Positions["g2"], Positions["g4"]); printBoard();
+movimentar(boardC, Pieces["wP"], Positions["e2"], Positions["e3"]); printBoard();
+movimentar(boardC, Pieces["bQ"], Positions["d8"], Positions["h4"]); printBoard();
+
+console.log("Xeque:", checkXeque(boardC, Jogador["b"]));
+console.log("Xeque-Mate:", checkXequeMate(boardC, Jogador["b"]));
+
+
+
+
+
+// let casas = checkPossiveisNos(boardC, Jogador["w"], {
+//   returnPositionAttacked: true,
+// });
+
+// for(const casa of casas) {
+//   const key = Object.keys(Positions).find((key) => {
+//     const [linha, coluna] = Positions[key];
+//     const [l, c] = casa;
+
+//     return linha === l && coluna === c;
+//   });
+
+//   console.log(key);
+// }
+
+
+
+//? Main
+
+// newGame();
+// printBoard();
+// let jogadaEscolhida;
+// let jogadorAtual = Jogador["w"];
+// let resultFinal = false;
+
+// while (!resultFinal) {
+//   if (jogadorAtual === Jogador["w"]) {
+//     jogadaEscolhida = humano(boardC);
+
+//     const [piece, posicaoOrigem, posicaoDestino] = jogadaEscolhida;
+
+//       let sucess = movimentar(boardC, piece, posicaoOrigem, posicaoDestino);
+
+//       if(!sucess) {
+//         console.log("Movimento inválido");
+//         continue;
+//       }
+//   } else {
+//     jogadaEscolhida = IA();
+
+//     const [piece, posicaoOrigem, posicaoDestino] = jogadaEscolhida;
+
+//     movimentar(boardC, piece, posicaoOrigem, posicaoDestino);
+
+//     printBoard();
+//   }
+
+//   resultFinal = checkResultFinal(estadoAtual);
+
+//   jogadorAtual = jogadorAtual === Jogador["w"]? Jogador["b"] : Jogador["w"];
+// }
 
 /**
  * Recebe uma posição e um tabuleiro, retorna a peça relativa a posição.

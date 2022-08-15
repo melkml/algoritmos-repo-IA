@@ -1,13 +1,4 @@
 const promp = require("prompt-sync")();
-
-let wRMove = false;
-let bRMove = false;
-let wDTMove = false;
-let wETMove = false;
-let bDTMove = false;
-let bETMove = false;
-
-const boardC: number[][] = [];
 //? Maps
 function clone(array: any[]) {
   return JSON.parse(JSON.stringify(array));
@@ -43,12 +34,12 @@ function humano(board: number[][], jogador: number): any {
   boardCopy[linhaDestino][colunaDestino] = boardCopy[linhaOrigem][colunaOrigem];
   boardCopy[linhaOrigem][colunaOrigem] = Pieces["--"];
 
-  const jogadorOposto = jogador === Jogador["w"]? Jogador["b"] : Jogador["w"]
+  const jogadorOposto = jogador === Jogador["w"] ? Jogador["b"] : Jogador["w"];
   const isCheck = checkXeque(boardCopy, jogadorOposto);
 
-    if(isCheck) {
-      return [-2, [-1, -1], [-1, -1]];
-    }
+  if (isCheck) {
+    return [-2, [-1, -1], [-1, -1]];
+  }
 
   return [
     board[linhaOrigem][colunaOrigem],
@@ -169,7 +160,6 @@ const Positions: Record<string, [number, number]> = {
 };
 
 function printBoard(board: number[][]) {
-
   console.log(`
  8 | ${printPieces[board[9][2]]} | ${printPieces[board[9][3]]} | ${
     printPieces[board[9][4]]
@@ -349,21 +339,33 @@ checkPositionValid[Pieces["wP"]] = (
   colunaDestino: number
 ) => {
   // diagonal direita
-  if (
-    linhaDestino === linhaOrigem + 1 &&
-    colunaDestino === colunaOrigem + 1 &&
-    board[linhaDestino][colunaDestino] > 6
-  ) {
-    return true;
+  if (linhaDestino === linhaOrigem + 1 && colunaDestino === colunaOrigem + 1) {
+    if (board[linhaDestino][colunaDestino] > 6) {
+      return true;
+    }
+
+    if (unPassant[0]) {
+      const [linhaUn, colunaUn] = unPassant[1];
+
+      if (linhaUn === linhaOrigem && colunaUn === colunaOrigem + 1) {
+        return true;
+      }
+    }
   }
 
   // diagonal esquerda
-  if (
-    linhaDestino === linhaOrigem + 1 &&
-    colunaDestino === colunaOrigem - 1 &&
-    board[linhaDestino][colunaDestino] > 6
-  ) {
-    return true;
+  if (linhaDestino === linhaOrigem + 1 && colunaDestino === colunaOrigem - 1) {
+    if (board[linhaDestino][colunaDestino] > 6) {
+      return true;
+    }
+
+    if (unPassant[0]) {
+      const [linhaUn, colunaUn] = unPassant[1];
+
+      if (linhaUn === linhaOrigem && colunaUn === colunaOrigem - 1) {
+        return true;
+      }
+    }
   }
 
   // frente
@@ -395,23 +397,40 @@ checkPositionValid[Pieces["bP"]] = (
   colunaDestino: number
 ) => {
   // diagonal direita
-  if (
-    linhaDestino === linhaOrigem - 1 &&
-    colunaDestino === colunaOrigem + 1 &&
-    board[linhaDestino][colunaDestino] < 7 &&
-    board[linhaDestino][colunaDestino] > 0
-  ) {
-    return true;
+  if (linhaDestino === linhaOrigem - 1 && colunaDestino === colunaOrigem + 1) {
+    if (
+      board[linhaDestino][colunaDestino] < 7 &&
+      board[linhaDestino][colunaDestino] > 0
+    ) {
+      return true;
+    }
+
+    if (unPassant[0]) {
+  
+      const [linhaUn, colunaUn] = unPassant[1];
+
+      if (linhaUn === linhaOrigem && colunaUn === colunaOrigem + 1) {
+        return true;
+      }
+    }
   }
 
   // diagonal esquerda
-  if (
-    linhaDestino === linhaOrigem - 1 &&
-    colunaDestino === colunaOrigem - 1 &&
-    board[linhaDestino][colunaDestino] < 7 &&
-    board[linhaDestino][colunaDestino] > 0
-  ) {
-    return true;
+  if (linhaDestino === linhaOrigem - 1 && colunaDestino === colunaOrigem - 1) {
+    if (
+      board[linhaDestino][colunaDestino] < 7 &&
+      board[linhaDestino][colunaDestino] > 0
+    ) {
+      return true;
+    }
+
+    if (unPassant[0]) {
+      const [linhaUn, colunaUn] = unPassant[1];
+
+      if (linhaUn === linhaOrigem && colunaUn === colunaOrigem - 1) {
+        return true;
+      }
+    }
   }
 
   // frente
@@ -1299,8 +1318,13 @@ function movimentar(
 
   const [linhaOrigem, colunaOrigem] = positionOrigem;
   const [linhaDestino, colunaDestino] = positionDestion;
-  
-  if(linhaOrigem < 0 || linhaDestino < 0 || colunaOrigem < 0 || colunaDestino < 0) {
+
+  if (
+    linhaOrigem < 0 ||
+    linhaDestino < 0 ||
+    colunaOrigem < 0 ||
+    colunaDestino < 0
+  ) {
     return false;
   }
 
@@ -1320,8 +1344,43 @@ function movimentar(
     return false;
   }
 
-  board[linhaOrigem][colunaOrigem] = Pieces["--"];
-  board[linhaDestino][colunaDestino] = piece;
+  let moveUnPassant = false;
+
+  if(unPassant[0]) {
+    
+    const [linhaUn, colunaUn] = unPassant[1];
+
+    if(piece === Pieces["wP"]) {
+      if(linhaDestino === linhaUn + 1 && colunaDestino === colunaUn && colunaDestino > colunaOrigem) {
+        board[linhaOrigem][colunaOrigem] = Pieces["--"];
+        board[linhaDestino][colunaDestino] = piece;
+        board[linhaUn][colunaUn] = Pieces["--"];
+        moveUnPassant = true;
+      }
+    }
+
+    if(piece === Pieces["bP"]) {
+      if(linhaDestino === linhaUn - 1 && colunaDestino === colunaUn && colunaDestino > colunaOrigem) {
+        board[linhaOrigem][colunaOrigem] = Pieces["--"];
+        board[linhaDestino][colunaDestino] = piece;
+        board[linhaUn][colunaUn] = Pieces["--"];
+        moveUnPassant = true;
+      }
+    }
+  }
+
+  if(!moveUnPassant) {
+    board[linhaOrigem][colunaOrigem] = Pieces["--"];
+    board[linhaDestino][colunaDestino] = piece;
+  }
+
+
+  if (
+    (piece === Pieces["wP"] && linhaDestino === linhaOrigem + 2) ||
+    (piece === Pieces["bP"] && linhaDestino === linhaOrigem - 2)
+  ) {
+    unPassant = [true, [linhaDestino, colunaDestino]];
+  }
 
   return true;
 }
@@ -1347,7 +1406,6 @@ checkPossiveisJogadasByPiece[Pieces["wP"]] = (
 
   if (canMoveCimaOne) {
     jogadasPossiveis.push(boardCCopy);
-    casasAtacadas.push([linha + 1, coluna]);
   }
 
   boardCCopy = clone(boardC);
@@ -1361,7 +1419,6 @@ checkPossiveisJogadasByPiece[Pieces["wP"]] = (
 
   if (canMoveCimaTwo) {
     jogadasPossiveis.push(boardCCopy);
-    casasAtacadas.push([linha + 2, coluna]);
   }
 
   boardCCopy = clone(boardC);
@@ -1414,7 +1471,6 @@ checkPossiveisJogadasByPiece[Pieces["bP"]] = (
 
   if (canMoveCimaOne) {
     jogadasPossiveis.push(boardCCopy);
-    casasAtacadas.push([linha - 1, coluna]);
   }
 
   boardCCopy = clone(boardC);
@@ -1428,7 +1484,6 @@ checkPossiveisJogadasByPiece[Pieces["bP"]] = (
 
   if (canMoveCimaTwo) {
     jogadasPossiveis.push(boardCCopy);
-    casasAtacadas.push([linha - 2, coluna]);
   }
 
   boardCCopy = clone(boardC);
@@ -2960,12 +3015,26 @@ function anunciarVencedor(jogadorAtual: number) {
 }
 
 //? Main
+const boardC: number[][] = [];
+
+let wRMove = false;
+let bRMove = false;
+let wDTMove = false;
+let wETMove = false;
+let bDTMove = false;
+let bETMove = false;
+
+let unPassant: [boolean, [number, number]] = [false, [NaN, NaN]];
+let endUnPassant = false;
 
 let jogadaEscolhida;
 let jogadorAtual = Jogador["w"];
 let resultFinal = false;
 
+
 newGame();
+boardC[5][7] = Pieces["bP"];
+
 while (!resultFinal) {
   printBoard(boardC);
   if (jogadorAtual === Jogador["w"]) {
@@ -2991,11 +3060,11 @@ while (!resultFinal) {
     // Gerenciando condições de roque
     if (piece === Pieces["wR"]) {
       wRMove = true;
-    } 
+    }
 
     const [linhaWTD, colunaWTD] = Positions["h1"];
     const [linhaWTE, colunaWTE] = Positions["a1"];
-    
+
     if (boardC[linhaWTD][colunaWTD] === Pieces["--"]) {
       wDTMove = true;
     }
@@ -3028,8 +3097,8 @@ while (!resultFinal) {
       options as [number, number]
     );
 
-    if(!sucess) {
-      console.log('Movimento inválido');
+    if (!sucess) {
+      console.log("Movimento inválido");
       continue;
     }
 
@@ -3052,6 +3121,15 @@ while (!resultFinal) {
   }
 
   resultFinal = checkXequeMate(boardC, jogadorAtual);
+
+  if (endUnPassant) {
+    unPassant[0] = false;
+    endUnPassant = false;
+  }
+
+  if (unPassant[0]) {
+    endUnPassant = true;
+  }
 
   jogadorAtual = jogadorAtual === Jogador["w"] ? Jogador["b"] : Jogador["w"];
 }

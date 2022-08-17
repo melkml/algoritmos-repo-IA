@@ -90,6 +90,10 @@ while (!resultFinal) {
 
   resultFinal = checkXequeMate(board, jogadorAtual);
 
+  if(resultFinal) {
+    printBoard(board.casas, jogadorAtual, true)
+  }
+
   jogadorAtual = jogadorAtual === Jogador["w"] ? Jogador["b"] : Jogador["w"];
 }
 

@@ -316,11 +316,11 @@ export function checkXequeMate(board: Board, jogadorAtual: number) {
 
 export function anunciarVencedor(jogadorAtual: number) {
   if (jogadorAtual === Jogador["w"]) {
-    console.log("As pretas venceram.");
+    console.log("As brancas venceram.");
     return;
   }
 
-  console.log("As brancas venceram.");
+  console.log("As pretas venceram.");
 }
 
 export function checkRoque(

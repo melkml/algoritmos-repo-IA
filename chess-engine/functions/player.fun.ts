@@ -1,4 +1,4 @@
-import { checkXeque, clone } from ".";
+import { checkXeque, clone, printBoard } from ".";
 import { Jogador, Pieces, Positions, Roque } from "../libs";
 import { Board } from "../types";
 
@@ -18,7 +18,7 @@ export function humano(board: Board, jogador: number): any {
     }
 
     if (jogada === "s") {
-      console.log("Saindo...");
+      console.log("Oponente venceu. Saindo...");
       process.exit();
     }
 
@@ -43,6 +43,7 @@ export function humano(board: Board, jogador: number): any {
 
     if (!jogada.includes("-")) {
       console.log("Movimento precisa do hífen");
+      printBoard(board.casas, jogador, true);
       continue;
     }
 
@@ -53,6 +54,7 @@ export function humano(board: Board, jogador: number): any {
       !Object.keys(Positions).includes(posicaoDestino)
     ) {
       console.log("Posição não existe.");
+      printBoard(board.casas, jogador, true);
       continue;
     }
 
@@ -71,8 +73,16 @@ export function humano(board: Board, jogador: number): any {
     );
 
     if (isCheck) {
-      console.log("Movimento inválido.");
+      console.log("Peça está cravada.");
+      printBoard(board.casas, jogador, true);
       continue;
+    }
+
+
+    if(board.casas[linhaOrigem][colunaOrigem] === Pieces["--"]) {
+      console.log("Casa está vazia.");
+      printBoard(board.casas, jogador, true);
+      continue
     }
 
     break;

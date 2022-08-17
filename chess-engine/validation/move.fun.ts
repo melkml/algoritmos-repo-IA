@@ -16,14 +16,6 @@ export function movimentar(
   roqueAndJogador?: [number, number]
 ) {
 
-  if(piece > 6 && jogadorAtual === Jogador["w"]) {
-    return false;
-  }
-
-  if(piece < 7 && piece > 0 && jogadorAtual === Jogador["b"]) {
-    return false;
-  }
-
   const [r] = roqueAndJogador ? roqueAndJogador : [undefined];
 
   //Validação e movimentação de roque
@@ -56,6 +48,14 @@ export function movimentar(
       return true;
     }
 
+    return false;
+  }
+
+  if(piece > 6 && jogadorAtual === Jogador["w"]) {
+    return false;
+  }
+
+  if(piece < 7 && piece > 0 && jogadorAtual === Jogador["b"]) {
     return false;
   }
 

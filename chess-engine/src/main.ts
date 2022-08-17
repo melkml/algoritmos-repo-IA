@@ -1,20 +1,26 @@
-import { Jogador, Pieces, Positions } from "../libs";
+import { Jogador } from "../libs";
 import {
-  humano,
   newGame,
   printBoard,
   checkXequeMate,
   anunciarVencedor,
-  clone,
+  checkJogadorHumano,
+  escolherModoDeJogo,
 } from "../functions";
-import { checkPossiveisJogadasByPiece, checkPossiveisNos, movimentar } from "../validation";
+import { movimentar } from "../validation";
 import { Board } from "../types";
+
 //? Main
 
 let board: Board = new Board();
 
 let jogadaEscolhida;
 let jogadorAtual = Jogador["w"];
+
+const modo = escolherModoDeJogo();
+
+let jogadorHumano = Math.random() < 0.5 ? Jogador["w"] : Jogador["b"];
+
 let resultFinal = false;
 
 newGame(board.casas);
@@ -25,10 +31,10 @@ newGame(board.casas);
 // checkPossiveisNos(board, Jogador['w']).forEach((node) => printBoard((node as Board).casas));
 
 while (!resultFinal) {
-  printBoard(board.casas);
   if (jogadorAtual === Jogador["w"]) {
+    printBoard(board.casas, jogadorAtual, true);
     console.log("Turno: Brancas");
-    jogadaEscolhida = humano(board, jogadorAtual);
+    jogadaEscolhida = checkJogadorHumano(jogadorHumano, jogadorAtual, board);
     const [piece, posicaoOrigem, posicaoDestino, isHumano, roque] =
       jogadaEscolhida;
 
@@ -46,10 +52,18 @@ while (!resultFinal) {
       console.log("Movimento inválido");
       continue;
     }
-
   } else {
+    printBoard(board.casas, jogadorAtual, true);
     console.log("Turno: Pretas");
-    jogadaEscolhida = humano(board, jogadorAtual);
+
+    jogadorHumano =
+      modo == "2"
+        ? jogadorHumano
+        : jogadorHumano === Jogador["w"]
+        ? Jogador["b"]
+        : jogadorHumano;
+
+    jogadaEscolhida = checkJogadorHumano(jogadorHumano, jogadorAtual, board);
     const [piece, posicaoOrigem, posicaoDestino, isHumano, roque] =
       jogadaEscolhida;
 

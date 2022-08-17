@@ -1,6 +1,6 @@
+import { checkXeque, clone } from '.';
 import {Jogador, Pieces, Positions, Roque} from '../libs'
 import { Board } from '../types';
-import {clone, checkXeque} from './chess.fun'
 
 const promp = require("prompt-sync")();
 
@@ -46,6 +46,21 @@ export function humano(board: Board, jogador: number): any {
         console.log("Posição não existe.");
         continue
       }
+  
+    const [linhaOrigem, colunaOrigem] = Positions[posicaoOrigem];    
+    const [linhaDestino, colunaDestino] = Positions[posicaoDestino];
+    
+    let boardCopy = clone(board);
+
+    boardCopy.casas[linhaDestino][colunaDestino] = boardCopy.casas[linhaOrigem][colunaOrigem];
+    boardCopy.casas[linhaOrigem][colunaOrigem] = Pieces["--"];
+
+    const isCheck = checkXeque(boardCopy, jogador === Jogador['w']? Jogador["b"] : Jogador["w"]);
+
+    if(isCheck) {
+      console.log("Movimento inválido.");
+      continue;
+    }
 
       break; 
     }
@@ -53,21 +68,8 @@ export function humano(board: Board, jogador: number): any {
    
     const [posicaoOrigem, posicaoDestino] = jogada.split("-");
   
-    const [linhaOrigem, colunaOrigem] = Positions[posicaoOrigem];
-    const [linhaDestino, colunaDestino] = Positions[posicaoDestino];
-  
-    let boardCopy = clone(board);
-    boardCopy.casas[linhaDestino][colunaDestino] = boardCopy.casas[linhaOrigem][colunaOrigem];
-    boardCopy.casas[linhaOrigem][colunaOrigem] = Pieces["--"];
-  
-    const jogadorOposto = jogador === Jogador["w"] ? Jogador["b"] : Jogador["w"];
+    const [linhaOrigem, colunaOrigem] = Positions[posicaoOrigem];        
 
-    const isCheck = checkXeque(boardCopy, jogadorOposto);
-
-    if (isCheck) {
-      return [-2, [-1, -1], [-1, -1], true];
-    }
-  
     return [
       board.casas[linhaOrigem][colunaOrigem],
       Positions[posicaoOrigem],

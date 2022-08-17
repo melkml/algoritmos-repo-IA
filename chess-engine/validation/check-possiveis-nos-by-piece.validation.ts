@@ -6,6 +6,7 @@ import { Board } from '../types';
 export let checkPossiveisJogadasByPiece: any[] = [];
 
 checkPossiveisJogadasByPiece[Pieces["wP"]] = (
+  jogadorAtual: number,
   boardC: Board,
   linha: number,
   coluna: number,
@@ -16,6 +17,7 @@ checkPossiveisJogadasByPiece[Pieces["wP"]] = (
   let boardCCopy = clone(boardC);
 
   const canMoveCimaOne = movimentar(
+    jogadorAtual,
     boardCCopy,
     Pieces["wP"],
     [linha, coluna],
@@ -29,6 +31,7 @@ checkPossiveisJogadasByPiece[Pieces["wP"]] = (
   boardCCopy = clone(boardC);
 
   const canMoveCimaTwo = movimentar(
+    jogadorAtual,
     boardCCopy,
     Pieces["wP"],
     [linha, coluna],
@@ -42,6 +45,7 @@ checkPossiveisJogadasByPiece[Pieces["wP"]] = (
   boardCCopy = clone(boardC);
 
   const canMoveDiagonalDireita = movimentar(
+    jogadorAtual,
     boardCCopy,
     Pieces["wP"],
     [linha, coluna],
@@ -56,6 +60,7 @@ checkPossiveisJogadasByPiece[Pieces["wP"]] = (
   boardCCopy = clone(boardC);
 
   const canMoveDiagonalEsquerda = movimentar(
+    jogadorAtual,
     boardCCopy,
     Pieces["wP"],
     [linha, coluna],
@@ -71,6 +76,7 @@ checkPossiveisJogadasByPiece[Pieces["wP"]] = (
 };
 
 checkPossiveisJogadasByPiece[Pieces["bP"]] = (
+  jogadorAtual: number,
   boardC: Board,
   linha: number,
   coluna: number,
@@ -81,6 +87,7 @@ checkPossiveisJogadasByPiece[Pieces["bP"]] = (
   let boardCCopy = clone(boardC);
 
   const canMoveCimaOne = movimentar(
+    jogadorAtual,
     boardCCopy,
     Pieces["bP"],
     [linha, coluna],
@@ -94,6 +101,7 @@ checkPossiveisJogadasByPiece[Pieces["bP"]] = (
   boardCCopy = clone(boardC);
 
   const canMoveCimaTwo = movimentar(
+    jogadorAtual,
     boardCCopy,
     Pieces["bP"],
     [linha, coluna],
@@ -107,6 +115,7 @@ checkPossiveisJogadasByPiece[Pieces["bP"]] = (
   boardCCopy = clone(boardC);
 
   const canMoveDiagonalDireita = movimentar(
+    jogadorAtual,
     boardCCopy,
     Pieces["bP"],
     [linha, coluna],
@@ -121,6 +130,7 @@ checkPossiveisJogadasByPiece[Pieces["bP"]] = (
   boardCCopy = clone(boardC);
 
   const canMoveDiagonalEsquerda = movimentar(
+    jogadorAtual,
     boardCCopy,
     Pieces["bP"],
     [linha, coluna],
@@ -136,6 +146,7 @@ checkPossiveisJogadasByPiece[Pieces["bP"]] = (
 };
 
 checkPossiveisJogadasByPiece[Pieces["wC"]] = (
+  jogadorAtual: number,
   boardC: Board,
   linha: number,
   coluna: number,
@@ -146,6 +157,7 @@ checkPossiveisJogadasByPiece[Pieces["wC"]] = (
   let boardCCopy = clone(boardC);
 
   let canMoveDireitaCima = movimentar(
+    jogadorAtual,
     boardCCopy,
     Pieces["wC"],
     [linha, coluna],
@@ -160,6 +172,7 @@ checkPossiveisJogadasByPiece[Pieces["wC"]] = (
   boardCCopy = clone(boardC);
 
   canMoveDireitaCima = movimentar(
+    jogadorAtual,
     boardCCopy,
     Pieces["wC"],
     [linha, coluna],
@@ -174,6 +187,7 @@ checkPossiveisJogadasByPiece[Pieces["wC"]] = (
   boardCCopy = clone(boardC);
 
   let canMoveEsquerdaCima = movimentar(
+    jogadorAtual,
     boardCCopy,
     Pieces["wC"],
     [linha, coluna],
@@ -188,6 +202,7 @@ checkPossiveisJogadasByPiece[Pieces["wC"]] = (
   boardCCopy = clone(boardC);
 
   canMoveEsquerdaCima = movimentar(
+    jogadorAtual,
     boardCCopy,
     Pieces["wC"],
     [linha, coluna],
@@ -202,6 +217,7 @@ checkPossiveisJogadasByPiece[Pieces["wC"]] = (
   boardCCopy = clone(boardC);
 
   let canMoveEsquerdaBaixo = movimentar(
+    jogadorAtual,
     boardCCopy,
     Pieces["wC"],
     [linha, coluna],
@@ -216,6 +232,7 @@ checkPossiveisJogadasByPiece[Pieces["wC"]] = (
   boardCCopy = clone(boardC);
 
   canMoveEsquerdaBaixo = movimentar(
+    jogadorAtual,
     boardCCopy,
     Pieces["wC"],
     [linha, coluna],
@@ -230,6 +247,7 @@ checkPossiveisJogadasByPiece[Pieces["wC"]] = (
   boardCCopy = clone(boardC);
 
   let canMoveDireitaBaixo = movimentar(
+    jogadorAtual,
     boardCCopy,
     Pieces["wC"],
     [linha, coluna],
@@ -244,6 +262,7 @@ checkPossiveisJogadasByPiece[Pieces["wC"]] = (
   boardCCopy = clone(boardC);
 
   canMoveDireitaBaixo = movimentar(
+    jogadorAtual,
     boardCCopy,
     Pieces["wC"],
     [linha, coluna],
@@ -259,6 +278,7 @@ checkPossiveisJogadasByPiece[Pieces["wC"]] = (
 };
 
 checkPossiveisJogadasByPiece[Pieces["bC"]] = (
+  jogadorAtual: number,
   boardC: Board,
   linha: number,
   coluna: number,
@@ -269,6 +289,7 @@ checkPossiveisJogadasByPiece[Pieces["bC"]] = (
   let boardCCopy = clone(boardC);
 
   let canMoveDireitaCima = movimentar(
+    jogadorAtual,
     boardCCopy,
     Pieces["bC"],
     [linha, coluna],
@@ -283,6 +304,7 @@ checkPossiveisJogadasByPiece[Pieces["bC"]] = (
   boardCCopy = clone(boardC);
 
   canMoveDireitaCima = movimentar(
+    jogadorAtual,
     boardCCopy,
     Pieces["bC"],
     [linha, coluna],
@@ -297,6 +319,7 @@ checkPossiveisJogadasByPiece[Pieces["bC"]] = (
   boardCCopy = clone(boardC);
 
   let canMoveEsquerdaCima = movimentar(
+    jogadorAtual,
     boardCCopy,
     Pieces["bC"],
     [linha, coluna],
@@ -311,6 +334,7 @@ checkPossiveisJogadasByPiece[Pieces["bC"]] = (
   boardCCopy = clone(boardC);
 
   canMoveEsquerdaCima = movimentar(
+    jogadorAtual,
     boardCCopy,
     Pieces["bC"],
     [linha, coluna],
@@ -325,6 +349,7 @@ checkPossiveisJogadasByPiece[Pieces["bC"]] = (
   boardCCopy = clone(boardC);
 
   let canMoveEsquerdaBaixo = movimentar(
+    jogadorAtual,
     boardCCopy,
     Pieces["bC"],
     [linha, coluna],
@@ -339,6 +364,7 @@ checkPossiveisJogadasByPiece[Pieces["bC"]] = (
   boardCCopy = clone(boardC);
 
   canMoveEsquerdaBaixo = movimentar(
+    jogadorAtual,
     boardCCopy,
     Pieces["bC"],
     [linha, coluna],
@@ -353,6 +379,7 @@ checkPossiveisJogadasByPiece[Pieces["bC"]] = (
   boardCCopy = clone(boardC);
 
   let canMoveDireitaBaixo = movimentar(
+    jogadorAtual,
     boardCCopy,
     Pieces["bC"],
     [linha, coluna],
@@ -367,6 +394,7 @@ checkPossiveisJogadasByPiece[Pieces["bC"]] = (
   boardCCopy = clone(boardC);
 
   canMoveDireitaBaixo = movimentar(
+    jogadorAtual,
     boardCCopy,
     Pieces["bC"],
     [linha, coluna],
@@ -382,6 +410,7 @@ checkPossiveisJogadasByPiece[Pieces["bC"]] = (
 };
 
 checkPossiveisJogadasByPiece[Pieces["wR"]] = (
+  jogadorAtual: number,
   boardC: Board,
   linha: number,
   coluna: number,
@@ -392,6 +421,7 @@ checkPossiveisJogadasByPiece[Pieces["wR"]] = (
   let boardCCopy = clone(boardC);
 
   let canMoveCima = movimentar(
+    jogadorAtual,
     boardCCopy,
     Pieces["wR"],
     [linha, coluna],
@@ -406,6 +436,7 @@ checkPossiveisJogadasByPiece[Pieces["wR"]] = (
   boardCCopy = clone(boardC);
 
   let canMoveBaixo = movimentar(
+    jogadorAtual,
     boardCCopy,
     Pieces["wR"],
     [linha, coluna],
@@ -420,6 +451,7 @@ checkPossiveisJogadasByPiece[Pieces["wR"]] = (
   boardCCopy = clone(boardC);
 
   let canMoveEsquerda = movimentar(
+    jogadorAtual,
     boardCCopy,
     Pieces["wR"],
     [linha, coluna],
@@ -434,6 +466,7 @@ checkPossiveisJogadasByPiece[Pieces["wR"]] = (
   boardCCopy = clone(boardC);
 
   let canMoveDireita = movimentar(
+    jogadorAtual,
     boardCCopy,
     Pieces["wR"],
     [linha, coluna],
@@ -448,6 +481,7 @@ checkPossiveisJogadasByPiece[Pieces["wR"]] = (
   boardCCopy = clone(boardC);
 
   let canMoveDiagonalDireitaCima = movimentar(
+    jogadorAtual,
     boardCCopy,
     Pieces["wR"],
     [linha, coluna],
@@ -462,6 +496,7 @@ checkPossiveisJogadasByPiece[Pieces["wR"]] = (
   boardCCopy = clone(boardC);
 
   let canMoveDiagonalDireitaBaixo = movimentar(
+    jogadorAtual,
     boardCCopy,
     Pieces["wR"],
     [linha, coluna],
@@ -476,6 +511,7 @@ checkPossiveisJogadasByPiece[Pieces["wR"]] = (
   boardCCopy = clone(boardC);
 
   let canMoveDiagonalEsquerdaCima = movimentar(
+    jogadorAtual,
     boardCCopy,
     Pieces["wR"],
     [linha, coluna],
@@ -490,6 +526,7 @@ checkPossiveisJogadasByPiece[Pieces["wR"]] = (
   boardCCopy = clone(boardC);
 
   let canMoveDiagonalEsquerdaBaixo = movimentar(
+    jogadorAtual,
     boardCCopy,
     Pieces["wR"],
     [linha, coluna],
@@ -505,6 +542,7 @@ checkPossiveisJogadasByPiece[Pieces["wR"]] = (
 };
 
 checkPossiveisJogadasByPiece[Pieces["bR"]] = (
+  jogadorAtual: number,
   boardC: Board,
   linha: number,
   coluna: number,
@@ -515,6 +553,7 @@ checkPossiveisJogadasByPiece[Pieces["bR"]] = (
   let boardCCopy = clone(boardC);
 
   let canMoveCima = movimentar(
+    jogadorAtual,
     boardCCopy,
     Pieces["bR"],
     [linha, coluna],
@@ -529,6 +568,7 @@ checkPossiveisJogadasByPiece[Pieces["bR"]] = (
   boardCCopy = clone(boardC);
 
   let canMoveBaixo = movimentar(
+    jogadorAtual,
     boardCCopy,
     Pieces["bR"],
     [linha, coluna],
@@ -543,6 +583,7 @@ checkPossiveisJogadasByPiece[Pieces["bR"]] = (
   boardCCopy = clone(boardC);
 
   let canMoveEsquerda = movimentar(
+    jogadorAtual,
     boardCCopy,
     Pieces["bR"],
     [linha, coluna],
@@ -557,6 +598,7 @@ checkPossiveisJogadasByPiece[Pieces["bR"]] = (
   boardCCopy = clone(boardC);
 
   let canMoveDireita = movimentar(
+    jogadorAtual,
     boardCCopy,
     Pieces["bR"],
     [linha, coluna],
@@ -571,6 +613,7 @@ checkPossiveisJogadasByPiece[Pieces["bR"]] = (
   boardCCopy = clone(boardC);
 
   let canMoveDiagonalDireitaCima = movimentar(
+    jogadorAtual,
     boardCCopy,
     Pieces["bR"],
     [linha, coluna],
@@ -585,6 +628,7 @@ checkPossiveisJogadasByPiece[Pieces["bR"]] = (
   boardCCopy = clone(boardC);
 
   let canMoveDiagonalDireitaBaixo = movimentar(
+    jogadorAtual,
     boardCCopy,
     Pieces["bR"],
     [linha, coluna],
@@ -599,6 +643,7 @@ checkPossiveisJogadasByPiece[Pieces["bR"]] = (
   boardCCopy = clone(boardC);
 
   let canMoveDiagonalEsquerdaCima = movimentar(
+    jogadorAtual,
     boardCCopy,
     Pieces["bR"],
     [linha, coluna],
@@ -613,6 +658,7 @@ checkPossiveisJogadasByPiece[Pieces["bR"]] = (
   boardCCopy = clone(boardC);
 
   let canMoveDiagonalEsquerdaBaixo = movimentar(
+    jogadorAtual,
     boardCCopy,
     Pieces["bR"],
     [linha, coluna],
@@ -628,6 +674,7 @@ checkPossiveisJogadasByPiece[Pieces["bR"]] = (
 };
 
 checkPossiveisJogadasByPiece[Pieces["wT"]] = (
+  jogadorAtual: number,
   boardC: Board,
   linha: number,
   coluna: number,
@@ -641,6 +688,7 @@ checkPossiveisJogadasByPiece[Pieces["wT"]] = (
 
   for (let li = linha + 1; boardCCopy.casas[linha][coluna] !== -1; li++) {
     canMove = movimentar(
+      jogadorAtual,
       boardCCopy,
       Pieces["wT"],
       [linha, coluna],
@@ -662,6 +710,7 @@ checkPossiveisJogadasByPiece[Pieces["wT"]] = (
   //Baixo
   for (let li = linha - 1; boardCCopy.casas[li][coluna] !== -1; li--) {
     canMove = movimentar(
+      jogadorAtual,
       boardCCopy,
       Pieces["wT"],
       [linha, coluna],
@@ -683,6 +732,7 @@ checkPossiveisJogadasByPiece[Pieces["wT"]] = (
   //Direita
   for (let co = coluna + 1; boardCCopy.casas[linha][co] !== -1; co++) {
     canMove = movimentar(
+      jogadorAtual,
       boardCCopy,
       Pieces["wT"],
       [linha, coluna],
@@ -704,6 +754,7 @@ checkPossiveisJogadasByPiece[Pieces["wT"]] = (
   //Esquerda
   for (let co = coluna - 1; boardCCopy.casas[linha][co] !== -1; co--) {
     canMove = movimentar(
+      jogadorAtual,
       boardCCopy,
       Pieces["wT"],
       [linha, coluna],
@@ -725,6 +776,7 @@ checkPossiveisJogadasByPiece[Pieces["wT"]] = (
 };
 
 checkPossiveisJogadasByPiece[Pieces["bT"]] = (
+  jogadorAtual: number,
   boardC: Board,
   linha: number,
   coluna: number,
@@ -738,6 +790,7 @@ checkPossiveisJogadasByPiece[Pieces["bT"]] = (
 
   for (let li = linha + 1; boardCCopy.casas[linha][coluna] !== -1; li++) {
     canMove = movimentar(
+      jogadorAtual,
       boardCCopy,
       Pieces["bT"],
       [linha, coluna],
@@ -759,6 +812,7 @@ checkPossiveisJogadasByPiece[Pieces["bT"]] = (
   //Baixo
   for (let li = linha - 1; boardCCopy.casas[li][coluna] !== -1; li--) {
     canMove = movimentar(
+      jogadorAtual,
       boardCCopy,
       Pieces["bT"],
       [linha, coluna],
@@ -780,6 +834,7 @@ checkPossiveisJogadasByPiece[Pieces["bT"]] = (
   //Direita
   for (let co = coluna + 1; boardCCopy.casas[linha][co] !== -1; co++) {
     canMove = movimentar(
+      jogadorAtual,
       boardCCopy,
       Pieces["bT"],
       [linha, coluna],
@@ -801,6 +856,7 @@ checkPossiveisJogadasByPiece[Pieces["bT"]] = (
   //Esquerda
   for (let co = coluna - 1; boardCCopy.casas[linha][co] !== -1; co--) {
     canMove = movimentar(
+      jogadorAtual,
       boardCCopy,
       Pieces["bT"],
       [linha, coluna],
@@ -822,6 +878,7 @@ checkPossiveisJogadasByPiece[Pieces["bT"]] = (
 };
 
 checkPossiveisJogadasByPiece[Pieces["wB"]] = (
+  jogadorAtual: number,
   boardC: Board,
   linha: number,
   coluna: number,
@@ -836,7 +893,8 @@ checkPossiveisJogadasByPiece[Pieces["wB"]] = (
   let co = coluna + 1;
 
   while (true) {
-    canMove = movimentar(boardCCopy, Pieces["wB"], [linha, coluna], [li, co]);
+    canMove = movimentar(
+      jogadorAtual,boardCCopy, Pieces["wB"], [linha, coluna], [li, co]);
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
@@ -856,7 +914,8 @@ checkPossiveisJogadasByPiece[Pieces["wB"]] = (
   co = coluna + 1;
 
   while (true) {
-    canMove = movimentar(boardCCopy, Pieces["wB"], [linha, coluna], [li, co]);
+    canMove = movimentar(
+      jogadorAtual,boardCCopy, Pieces["wB"], [linha, coluna], [li, co]);
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
@@ -876,7 +935,8 @@ checkPossiveisJogadasByPiece[Pieces["wB"]] = (
   co = coluna - 1;
 
   while (true) {
-    canMove = movimentar(boardCCopy, Pieces["wB"], [linha, coluna], [li, co]);
+    canMove = movimentar(
+      jogadorAtual,boardCCopy, Pieces["wB"], [linha, coluna], [li, co]);
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
@@ -896,7 +956,8 @@ checkPossiveisJogadasByPiece[Pieces["wB"]] = (
   co = coluna - 1;
 
   while (true) {
-    canMove = movimentar(boardCCopy, Pieces["wB"], [linha, coluna], [li, co]);
+    canMove = movimentar(
+      jogadorAtual,boardCCopy, Pieces["wB"], [linha, coluna], [li, co]);
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
@@ -914,6 +975,7 @@ checkPossiveisJogadasByPiece[Pieces["wB"]] = (
 };
 
 checkPossiveisJogadasByPiece[Pieces["bB"]] = (
+  jogadorAtual: number,
   boardC: Board,
   linha: number,
   coluna: number,
@@ -928,7 +990,8 @@ checkPossiveisJogadasByPiece[Pieces["bB"]] = (
   let co = coluna + 1;
 
   while (true) {
-    canMove = movimentar(boardCCopy, Pieces["bB"], [linha, coluna], [li, co]);
+    canMove = movimentar(
+      jogadorAtual,boardCCopy, Pieces["bB"], [linha, coluna], [li, co]);
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
@@ -948,7 +1011,8 @@ checkPossiveisJogadasByPiece[Pieces["bB"]] = (
   co = coluna + 1;
 
   while (true) {
-    canMove = movimentar(boardCCopy, Pieces["bB"], [linha, coluna], [li, co]);
+    canMove = movimentar(
+      jogadorAtual,boardCCopy, Pieces["bB"], [linha, coluna], [li, co]);
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
@@ -968,7 +1032,8 @@ checkPossiveisJogadasByPiece[Pieces["bB"]] = (
   co = coluna - 1;
 
   while (true) {
-    canMove = movimentar(boardCCopy, Pieces["bB"], [linha, coluna], [li, co]);
+    canMove = movimentar(
+      jogadorAtual,boardCCopy, Pieces["bB"], [linha, coluna], [li, co]);
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
@@ -988,7 +1053,8 @@ checkPossiveisJogadasByPiece[Pieces["bB"]] = (
   co = coluna - 1;
 
   while (true) {
-    canMove = movimentar(boardCCopy, Pieces["bB"], [linha, coluna], [li, co]);
+    canMove = movimentar(
+      jogadorAtual,boardCCopy, Pieces["bB"], [linha, coluna], [li, co]);
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
@@ -1006,6 +1072,7 @@ checkPossiveisJogadasByPiece[Pieces["bB"]] = (
 };
 
 checkPossiveisJogadasByPiece[Pieces["wQ"]] = (
+  jogadorAtual: number,
   boardC: Board,
   linha: number,
   coluna: number,
@@ -1018,6 +1085,7 @@ checkPossiveisJogadasByPiece[Pieces["wQ"]] = (
   let canMove;
   for (let li = linha + 1; boardC.casas[linha][coluna] !== -1; li++) {
     canMove = movimentar(
+      jogadorAtual,
       boardCCopy,
       Pieces["wQ"],
       [linha, coluna],
@@ -1039,6 +1107,7 @@ checkPossiveisJogadasByPiece[Pieces["wQ"]] = (
   //Baixo
   for (let li = linha - 1; boardC.casas[li][coluna] !== -1; li--) {
     canMove = movimentar(
+      jogadorAtual,
       boardCCopy,
       Pieces["wQ"],
       [linha, coluna],
@@ -1060,6 +1129,7 @@ checkPossiveisJogadasByPiece[Pieces["wQ"]] = (
   //Direita
   for (let co = coluna + 1; boardC.casas[linha][co] !== -1; co++) {
     canMove = movimentar(
+      jogadorAtual,
       boardCCopy,
       Pieces["wQ"],
       [linha, coluna],
@@ -1081,6 +1151,7 @@ checkPossiveisJogadasByPiece[Pieces["wQ"]] = (
   //Esquerda
   for (let co = coluna - 1; boardC.casas[linha][co] !== -1; co--) {
     canMove = movimentar(
+      jogadorAtual,
       boardCCopy,
       Pieces["wQ"],
       [linha, coluna],
@@ -1102,7 +1173,8 @@ checkPossiveisJogadasByPiece[Pieces["wQ"]] = (
   let co = coluna + 1;
 
   while (true) {
-    canMove = movimentar(boardCCopy, Pieces["wQ"], [linha, coluna], [li, co]);
+    canMove = movimentar(
+      jogadorAtual,boardCCopy, Pieces["wQ"], [linha, coluna], [li, co]);
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
@@ -1122,7 +1194,8 @@ checkPossiveisJogadasByPiece[Pieces["wQ"]] = (
   co = coluna + 1;
 
   while (true) {
-    canMove = movimentar(boardCCopy, Pieces["wQ"], [linha, coluna], [li, co]);
+    canMove = movimentar(
+      jogadorAtual,boardCCopy, Pieces["wQ"], [linha, coluna], [li, co]);
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
@@ -1142,7 +1215,8 @@ checkPossiveisJogadasByPiece[Pieces["wQ"]] = (
   co = coluna - 1;
 
   while (true) {
-    canMove = movimentar(boardCCopy, Pieces["wQ"], [linha, coluna], [li, co]);
+    canMove = movimentar(
+      jogadorAtual,boardCCopy, Pieces["wQ"], [linha, coluna], [li, co]);
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
@@ -1162,7 +1236,8 @@ checkPossiveisJogadasByPiece[Pieces["wQ"]] = (
   co = coluna - 1;
 
   while (true) {
-    canMove = movimentar(boardCCopy, Pieces["wQ"], [linha, coluna], [li, co]);
+    canMove = movimentar(
+      jogadorAtual,boardCCopy, Pieces["wQ"], [linha, coluna], [li, co]);
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
@@ -1180,6 +1255,7 @@ checkPossiveisJogadasByPiece[Pieces["wQ"]] = (
 };
 
 checkPossiveisJogadasByPiece[Pieces["bQ"]] = (
+  jogadorAtual: number,
   boardC: Board,
   linha: number,
   coluna: number,
@@ -1192,6 +1268,7 @@ checkPossiveisJogadasByPiece[Pieces["bQ"]] = (
   let canMove;
   for (let li = linha + 1; boardC.casas[linha][coluna] !== -1; li++) {
     canMove = movimentar(
+      jogadorAtual,
       boardCCopy,
       Pieces["bQ"],
       [linha, coluna],
@@ -1213,6 +1290,7 @@ checkPossiveisJogadasByPiece[Pieces["bQ"]] = (
   //Baixo
   for (let li = linha - 1; boardC.casas[li][coluna] !== -1; li--) {
     canMove = movimentar(
+      jogadorAtual,
       boardCCopy,
       Pieces["bQ"],
       [linha, coluna],
@@ -1234,6 +1312,7 @@ checkPossiveisJogadasByPiece[Pieces["bQ"]] = (
   //Direita
   for (let co = coluna + 1; boardC.casas[linha][co] !== -1; co++) {
     canMove = movimentar(
+      jogadorAtual,
       boardCCopy,
       Pieces["bQ"],
       [linha, coluna],
@@ -1255,6 +1334,7 @@ checkPossiveisJogadasByPiece[Pieces["bQ"]] = (
   //Esquerda
   for (let co = coluna - 1; boardC.casas[linha][co] !== -1; co--) {
     canMove = movimentar(
+      jogadorAtual,
       boardCCopy,
       Pieces["bQ"],
       [linha, coluna],
@@ -1276,7 +1356,8 @@ checkPossiveisJogadasByPiece[Pieces["bQ"]] = (
   let co = coluna + 1;
 
   while (true) {
-    canMove = movimentar(boardCCopy, Pieces["bQ"], [linha, coluna], [li, co]);
+    canMove = movimentar(
+      jogadorAtual,boardCCopy, Pieces["bQ"], [linha, coluna], [li, co]);
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
@@ -1296,7 +1377,8 @@ checkPossiveisJogadasByPiece[Pieces["bQ"]] = (
   co = coluna + 1;
 
   while (true) {
-    canMove = movimentar(boardCCopy, Pieces["bQ"], [linha, coluna], [li, co]);
+    canMove = movimentar(
+      jogadorAtual,boardCCopy, Pieces["bQ"], [linha, coluna], [li, co]);
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
@@ -1316,7 +1398,8 @@ checkPossiveisJogadasByPiece[Pieces["bQ"]] = (
   co = coluna - 1;
 
   while (true) {
-    canMove = movimentar(boardCCopy, Pieces["bQ"], [linha, coluna], [li, co]);
+    canMove = movimentar(
+      jogadorAtual,boardCCopy, Pieces["bQ"], [linha, coluna], [li, co]);
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
@@ -1336,7 +1419,8 @@ checkPossiveisJogadasByPiece[Pieces["bQ"]] = (
   co = coluna - 1;
 
   while (true) {
-    canMove = movimentar(boardCCopy, Pieces["bQ"], [linha, coluna], [li, co]);
+    canMove = movimentar(
+      jogadorAtual,boardCCopy, Pieces["bQ"], [linha, coluna], [li, co]);
 
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);

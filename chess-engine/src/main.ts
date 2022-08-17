@@ -18,6 +18,11 @@ let jogadorAtual = Jogador["w"];
 let resultFinal = false;
 
 newGame(board.casas);
+// board.casas[3][6] = Pieces["--"];
+// board.casas[4][6] = Pieces["wP"];
+// board.casas[2][4] = Pieces["bT"];
+
+// checkPossiveisNos(board, Jogador['w']).forEach((node) => printBoard((node as Board).casas));
 
 while (!resultFinal) {
   printBoard(board.casas);
@@ -27,12 +32,8 @@ while (!resultFinal) {
     const [piece, posicaoOrigem, posicaoDestino, isHumano, roque] =
       jogadaEscolhida;
 
-    if (piece > 6 || piece < 1) {
-      console.log("Movimento inválido");
-      continue;
-    }
-
     let sucess = movimentar(
+      jogadorAtual,
       board,
       piece,
       posicaoOrigem,
@@ -46,17 +47,11 @@ while (!resultFinal) {
       continue;
     }
 
-    printBoard(board.casas);
   } else {
     console.log("Turno: Pretas");
     jogadaEscolhida = humano(board, jogadorAtual);
     const [piece, posicaoOrigem, posicaoDestino, isHumano, roque] =
       jogadaEscolhida;
-
-    if (piece < 7 && piece > 1) {
-      console.log("Movimento inválido");
-      continue;
-    }
 
     let options;
     if (roque) {
@@ -64,6 +59,7 @@ while (!resultFinal) {
     }
 
     let sucess = movimentar(
+      jogadorAtual,
       board,
       piece,
       posicaoOrigem,
@@ -76,8 +72,6 @@ while (!resultFinal) {
       console.log("Movimento inválido");
       continue;
     }
-
-    printBoard(board.casas);
   }
 
   resultFinal = checkXequeMate(board, jogadorAtual);

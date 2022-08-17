@@ -1,9 +1,13 @@
 import { Jogador, Pieces, Roque } from "../libs";
-import { checkRoque, escolherPromocao, printBoard } from "../functions";
+import {
+  checkRoque,
+  escolherPromocao,
+} from "../functions";
 import { checkPositionValid } from "../validation";
 import { Board } from "../types";
 
 export function movimentar(
+  jogadorAtual: number,
   board: Board,
   piece: number,
   positionOrigem: [number, number],
@@ -11,9 +15,18 @@ export function movimentar(
   isHumano?: boolean,
   roqueAndJogador?: [number, number]
 ) {
+
+  if(piece > 6 && jogadorAtual === Jogador["w"]) {
+    return false;
+  }
+
+  if(piece < 7 && piece > 0 && jogadorAtual === Jogador["b"]) {
+    return false;
+  }
+
   const [r] = roqueAndJogador ? roqueAndJogador : [undefined];
 
-   //Validação e movimentação de roque
+  //Validação e movimentação de roque
   if (r) {
     const [roque, jogador] = roqueAndJogador ? roqueAndJogador : [NaN, NaN];
     const canRoque = checkRoque(board, roque, jogador);
@@ -62,6 +75,7 @@ export function movimentar(
     return false;
   }
 
+
   //Validação de movimento por peça
   const canMoviment = checkPositionValid[piece](
     piece === Pieces["wP"]
@@ -83,21 +97,26 @@ export function movimentar(
   board.casas[linhaDestino][colunaDestino] = piece;
 
   //Validação de unPassant
-  if (piece === Pieces['wP'] || piece === Pieces['bP']) {
-    
+  if (piece === Pieces["wP"] || piece === Pieces["bP"]) {
     let returnUnPassant = true;
 
-    let isUnPassant = checkPositionValid[piece](board, linhaOrigem, colunaOrigem, linhaDestino, colunaDestino, returnUnPassant);
-    
-    if(Array.isArray(isUnPassant)) {
+    let isUnPassant = checkPositionValid[piece](
+      board,
+      linhaOrigem,
+      colunaOrigem,
+      linhaDestino,
+      colunaDestino,
+      returnUnPassant
+    );
+
+    if (Array.isArray(isUnPassant)) {
       const [linhaUnPassant, colunaUnPassant] = board.unPassantB
-      ? board.unPassantB
-      : board.unPassantW
-      ? board.unPassantW
-      : [NaN, NaN];
+        ? board.unPassantB
+        : board.unPassantW
+        ? board.unPassantW
+        : [NaN, NaN];
 
       board.casas[linhaUnPassant][colunaUnPassant] = Pieces["--"];
-      console.log("Entrou");
     }
   }
 
@@ -132,13 +151,6 @@ export function movimentar(
     board.casas[linhaDestino][colunaDestino] = piecePromovida;
   }
 
-  const jogadorAtual =
-    piece > 6
-      ? Jogador["b"]
-      : piece < 7 && piece > 0
-      ? Jogador["w"]
-      : undefined;
-
   board.checkRoqueAfterMove(jogadorAtual as number);
 
   board.checkUnPassant();
@@ -147,7 +159,7 @@ export function movimentar(
     board.unPassantW = [linhaDestino, colunaDestino];
   }
 
-  if (piece === Pieces["bP"] && linhaDestino === linhaOrigem + 2) {
+  if (piece === Pieces["bP"] && linhaDestino === linhaOrigem - 2) {
     board.unPassantB = [linhaDestino, colunaDestino];
   }
 

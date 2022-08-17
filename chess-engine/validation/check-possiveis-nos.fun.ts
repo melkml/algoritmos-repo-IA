@@ -1,5 +1,5 @@
-import {Roque} from '../libs'
-import {clone} from '../functions/chess.fun'
+import {Jogador, Pieces, Roque} from '../libs'
+import {checkXeque, clone} from '../functions/chess.fun'
 import {checkPossiveisJogadasByPiece, movimentar} from '../validation'
 import { Board } from '../types';
 
@@ -34,6 +34,7 @@ export function checkPossiveisNos(
   
         jogadasPossiveis.push(
           ...checkPossiveisJogadasByPiece[board.casas[linha][coluna]](
+            jogador,
             board,
             linha,
             coluna,
@@ -50,6 +51,7 @@ export function checkPossiveisNos(
     }
   
     let canMove = movimentar(
+      jogador,
       boardCCopy,
       NaN,
       [NaN, NaN],
@@ -65,6 +67,7 @@ export function checkPossiveisNos(
     boardCCopy = clone(board);
   
     canMove = movimentar(
+      jogador,
       boardCCopy,
       NaN,
       [NaN, NaN],
@@ -76,6 +79,25 @@ export function checkPossiveisNos(
     if (canMove) {
       jogadasPossiveis.push(boardCCopy);
     }
+
+    //Validação de cravada
+
+  const jogadorOposto = jogador === Jogador['w']? Jogador["b"] : Jogador["w"];
+  
+  let jogadasPossiveisSemCravada = JSON.parse(JSON.stringify(jogadasPossiveis));
+
+  for(const jogada of jogadasPossiveis) {
+    const isCheck = checkXeque(jogada, jogadorOposto);
+
+    if (isCheck) {
+      const index: number = jogadasPossiveis.indexOf(jogada);
+      board.casas[4][6] = Pieces["wP"];
+      jogadasPossiveisSemCravada.splice(index, 1, null);
+    }
+  }
+
+  jogadasPossiveis = jogadasPossiveisSemCravada.filter((node: Board) => node !== null);
+ 
   
     return jogadasPossiveis;
   }

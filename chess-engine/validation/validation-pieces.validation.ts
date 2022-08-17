@@ -135,7 +135,6 @@ checkPositionValid[Pieces["bP"]] = (
       (colunaOrigem === colunaUnPassant + 1 ||
         colunaOrigem === colunaUnPassant - 1)
     ) {
-      canUnPassant = true;
       return canUnPassant? [true] : true;
     }
   }

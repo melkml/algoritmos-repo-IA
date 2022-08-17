@@ -91,7 +91,6 @@ export function checkPossiveisNos(
 
     if (isCheck) {
       const index: number = jogadasPossiveis.indexOf(jogada);
-      board.casas[4][6] = Pieces["wP"];
       jogadasPossiveisSemCravada.splice(index, 1, null);
     }
   }

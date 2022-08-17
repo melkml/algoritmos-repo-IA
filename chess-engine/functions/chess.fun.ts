@@ -18,50 +18,101 @@ export function clone(board: Board) {
   return boardClone;
 }
 
-export function printBoard(board: number[][]) {
-  console.log(`
-   8 | ${printPieces[board[9][2]]} | ${printPieces[board[9][3]]} | ${
-    printPieces[board[9][4]]
-  } | ${printPieces[board[9][5]]} | ${printPieces[board[9][6]]} | ${
-    printPieces[board[9][7]]
-  } | ${printPieces[board[9][8]]} | ${printPieces[board[9][9]]} |
-   7 | ${printPieces[board[8][2]]} | ${printPieces[board[8][3]]} | ${
-    printPieces[board[8][4]]
-  } | ${printPieces[board[8][5]]} | ${printPieces[board[8][6]]} | ${
-    printPieces[board[8][7]]
-  } | ${printPieces[board[8][8]]} | ${printPieces[board[8][9]]} |
-   6 | ${printPieces[board[7][2]]} | ${printPieces[board[7][3]]} | ${
-    printPieces[board[7][4]]
-  } | ${printPieces[board[7][5]]} | ${printPieces[board[7][6]]} | ${
-    printPieces[board[7][7]]
-  } | ${printPieces[board[7][8]]} | ${printPieces[board[7][9]]} |
-   5 | ${printPieces[board[6][2]]} | ${printPieces[board[6][3]]} | ${
-    printPieces[board[6][4]]
-  } | ${printPieces[board[6][5]]} | ${printPieces[board[6][6]]} | ${
-    printPieces[board[6][7]]
-  } | ${printPieces[board[6][8]]} | ${printPieces[board[6][9]]} |
-   4 | ${printPieces[board[5][2]]} | ${printPieces[board[5][3]]} | ${
-    printPieces[board[5][4]]
-  } | ${printPieces[board[5][5]]} | ${printPieces[board[5][6]]} | ${
-    printPieces[board[5][7]]
-  } | ${printPieces[board[5][8]]} | ${printPieces[board[5][9]]} |
-   3 | ${printPieces[board[4][2]]} | ${printPieces[board[4][3]]} | ${
-    printPieces[board[4][4]]
-  } | ${printPieces[board[4][5]]} | ${printPieces[board[4][6]]} | ${
-    printPieces[board[4][7]]
-  } | ${printPieces[board[4][8]]} | ${printPieces[board[4][9]]} |
-   2 | ${printPieces[board[3][2]]} | ${printPieces[board[3][3]]} | ${
-    printPieces[board[3][4]]
-  } | ${printPieces[board[3][5]]} | ${printPieces[board[3][6]]} | ${
-    printPieces[board[3][7]]
-  } | ${printPieces[board[3][8]]} | ${printPieces[board[3][9]]} |
-   1 | ${printPieces[board[2][2]]} | ${printPieces[board[2][3]]} | ${
-    printPieces[board[2][4]]
-  } | ${printPieces[board[2][5]]} | ${printPieces[board[2][6]]} | ${
-    printPieces[board[2][7]]
-  } | ${printPieces[board[2][8]]} | ${printPieces[board[2][9]]} |
-       a   b   c   d   e   f   g   h   
-    `);
+export function printBoard(board: number[][], jogador: number, humano?: boolean) {
+
+  if(humano) {
+    if(jogador === Jogador["w"]) {
+      console.log(`
+     8 | ${printPieces[board[9][2]]} | ${printPieces[board[9][3]]} | ${
+      printPieces[board[9][4]]
+    } | ${printPieces[board[9][5]]} | ${printPieces[board[9][6]]} | ${
+      printPieces[board[9][7]]
+    } | ${printPieces[board[9][8]]} | ${printPieces[board[9][9]]} |
+     7 | ${printPieces[board[8][2]]} | ${printPieces[board[8][3]]} | ${
+      printPieces[board[8][4]]
+    } | ${printPieces[board[8][5]]} | ${printPieces[board[8][6]]} | ${
+      printPieces[board[8][7]]
+    } | ${printPieces[board[8][8]]} | ${printPieces[board[8][9]]} |
+     6 | ${printPieces[board[7][2]]} | ${printPieces[board[7][3]]} | ${
+      printPieces[board[7][4]]
+    } | ${printPieces[board[7][5]]} | ${printPieces[board[7][6]]} | ${
+      printPieces[board[7][7]]
+    } | ${printPieces[board[7][8]]} | ${printPieces[board[7][9]]} |
+     5 | ${printPieces[board[6][2]]} | ${printPieces[board[6][3]]} | ${
+      printPieces[board[6][4]]
+    } | ${printPieces[board[6][5]]} | ${printPieces[board[6][6]]} | ${
+      printPieces[board[6][7]]
+    } | ${printPieces[board[6][8]]} | ${printPieces[board[6][9]]} |
+     4 | ${printPieces[board[5][2]]} | ${printPieces[board[5][3]]} | ${
+      printPieces[board[5][4]]
+    } | ${printPieces[board[5][5]]} | ${printPieces[board[5][6]]} | ${
+      printPieces[board[5][7]]
+    } | ${printPieces[board[5][8]]} | ${printPieces[board[5][9]]} |
+     3 | ${printPieces[board[4][2]]} | ${printPieces[board[4][3]]} | ${
+      printPieces[board[4][4]]
+    } | ${printPieces[board[4][5]]} | ${printPieces[board[4][6]]} | ${
+      printPieces[board[4][7]]
+    } | ${printPieces[board[4][8]]} | ${printPieces[board[4][9]]} |
+     2 | ${printPieces[board[3][2]]} | ${printPieces[board[3][3]]} | ${
+      printPieces[board[3][4]]
+    } | ${printPieces[board[3][5]]} | ${printPieces[board[3][6]]} | ${
+      printPieces[board[3][7]]
+    } | ${printPieces[board[3][8]]} | ${printPieces[board[3][9]]} |
+     1 | ${printPieces[board[2][2]]} | ${printPieces[board[2][3]]} | ${
+      printPieces[board[2][4]]
+    } | ${printPieces[board[2][5]]} | ${printPieces[board[2][6]]} | ${
+      printPieces[board[2][7]]
+    } | ${printPieces[board[2][8]]} | ${printPieces[board[2][9]]} |
+         a   b   c   d   e   f   g   h   
+      `);
+      return;
+    } 
+  
+    console.log(`
+    1 | ${printPieces[board[2][2]]} | ${printPieces[board[2][3]]} | ${
+      printPieces[board[2][4]]
+    } | ${printPieces[board[2][5]]} | ${printPieces[board[2][6]]} | ${
+      printPieces[board[2][7]]
+    } | ${printPieces[board[2][8]]} | ${printPieces[board[2][9]]} |
+    2 | ${printPieces[board[3][2]]} | ${printPieces[board[3][3]]} | ${
+      printPieces[board[3][4]]
+    } | ${printPieces[board[3][5]]} | ${printPieces[board[3][6]]} | ${
+      printPieces[board[3][7]]
+    } | ${printPieces[board[3][8]]} | ${printPieces[board[3][9]]} |
+    3 | ${printPieces[board[4][2]]} | ${printPieces[board[4][3]]} | ${
+      printPieces[board[4][4]]
+    } | ${printPieces[board[4][5]]} | ${printPieces[board[4][6]]} | ${
+      printPieces[board[4][7]]
+    } | ${printPieces[board[4][8]]} | ${printPieces[board[4][9]]} |
+    4 | ${printPieces[board[5][2]]} | ${printPieces[board[5][3]]} | ${
+      printPieces[board[5][4]]
+    } | ${printPieces[board[5][5]]} | ${printPieces[board[5][6]]} | ${
+      printPieces[board[5][7]]
+    } | ${printPieces[board[5][8]]} | ${printPieces[board[5][9]]} |
+    5 | ${printPieces[board[6][2]]} | ${printPieces[board[6][3]]} | ${
+      printPieces[board[6][4]]
+    } | ${printPieces[board[6][5]]} | ${printPieces[board[6][6]]} | ${
+      printPieces[board[6][7]]
+    } | ${printPieces[board[6][8]]} | ${printPieces[board[6][9]]} |
+    6 | ${printPieces[board[7][2]]} | ${printPieces[board[7][3]]} | ${
+      printPieces[board[7][4]]
+    } | ${printPieces[board[7][5]]} | ${printPieces[board[7][6]]} | ${
+      printPieces[board[7][7]]
+    } | ${printPieces[board[7][8]]} | ${printPieces[board[7][9]]} |
+    7 | ${printPieces[board[8][2]]} | ${printPieces[board[8][3]]} | ${
+      printPieces[board[8][4]]
+    } | ${printPieces[board[8][5]]} | ${printPieces[board[8][6]]} | ${
+      printPieces[board[8][7]]
+    } | ${printPieces[board[8][8]]} | ${printPieces[board[8][9]]} |
+    8 | ${printPieces[board[9][2]]} | ${printPieces[board[9][3]]} | ${
+      printPieces[board[9][4]]
+    } | ${printPieces[board[9][5]]} | ${printPieces[board[9][6]]} | ${
+      printPieces[board[9][7]]
+    } | ${printPieces[board[9][8]]} | ${printPieces[board[9][9]]} |
+         a   b   c   d   e   f   g   h   
+      `);
+  }
+
 }
 
 export function newGame(board: number[][]) {

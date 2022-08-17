@@ -60,7 +60,7 @@ export function printBoard(board: number[][]) {
   } | ${printPieces[board[2][5]]} | ${printPieces[board[2][6]]} | ${
     printPieces[board[2][7]]
   } | ${printPieces[board[2][8]]} | ${printPieces[board[2][9]]} |
-       a    b    c    d    e    f    g    h   
+       a   b   c   d   e   f   g   h   
     `);
 }
 

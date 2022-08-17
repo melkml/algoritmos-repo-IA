@@ -20,19 +20,19 @@ export const Pieces: Record<string, number> = {
   };
   
 export const printPieces: Record<number, string> = {
-    0: "--",
-    1: "wP",
-    2: "wC",
-    3: "wB",
-    4: "wT",
-    5: "wQ",
-    6: "wR",
-    7: "bP",
-    8: "bC",
-    9: "bB",
-    10: "bT",
-    11: "bQ",
-    12: "bR",
+    0: "-",
+    1: "♙",
+    2: "♘",
+    3: "♗",
+    4: "♖",
+    5: "♕",
+    6: "♔",
+    7: "♟",
+    8: "♞",
+    9: "♝",
+    10: "♜",
+    11: "♛",
+    12: "♚",
   };
   
 export const Positions: Record<string, [number, number]> = {

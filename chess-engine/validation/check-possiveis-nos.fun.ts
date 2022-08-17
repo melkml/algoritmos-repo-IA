@@ -1,38 +1,39 @@
 import {Roque} from '../libs'
 import {clone} from '../functions/chess.fun'
 import {checkPossiveisJogadasByPiece, movimentar} from '../validation'
+import { Board } from '../types';
 
 interface OptionsCheckPossiveisNos {
   returnPositionAttacked: boolean;
 }
 
 export function checkPossiveisNos(
-    board: number[][],
+    board: Board,
     jogador: number,
     options?: OptionsCheckPossiveisNos
-  ): number[][][] | [number, number][] {
+  ): Board[] | [number, number][] {
     let jogadasPossiveis = [];
   
     for (let linha = 0; linha < 12; linha++) {
       for (let coluna = 0; coluna < 12; coluna++) {
-        if (board[linha][coluna] < 1) {
+        if (board.casas[linha][coluna] < 1) {
           continue;
         }
   
-        if (board[linha][coluna] > 6 && jogador === 0) {
+        if (board.casas[linha][coluna] > 6 && jogador === 0) {
           continue;
         }
   
         if (
-          board[linha][coluna] > 0 &&
-          board[linha][coluna] < 7 &&
+          board.casas[linha][coluna] > 0 &&
+          board.casas[linha][coluna] < 7 &&
           jogador === 1
         ) {
           continue;
         }
   
         jogadasPossiveis.push(
-          ...checkPossiveisJogadasByPiece[board[linha][coluna]](
+          ...checkPossiveisJogadasByPiece[board.casas[linha][coluna]](
             board,
             linha,
             coluna,

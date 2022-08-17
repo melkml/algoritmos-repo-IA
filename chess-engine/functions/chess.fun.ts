@@ -1,16 +1,21 @@
 import { printPieces, Jogador, Pieces, Positions, Roque } from "../libs";
-import {
-  wDTMove,
-  wETMove,
-  wRMove,
-  bDTMove,
-  bETMove,
-  bRMove,
-} from "../src/main";
+import { Board } from "../types";
 import { checkPossiveisNos } from "../validation/check-possiveis-nos.fun";
 
-export function clone(array: any[]) {
-  return JSON.parse(JSON.stringify(array));
+export function clone(board: Board) {
+  let boardClone = new Board();
+  
+  boardClone.casas = JSON.parse(JSON.stringify(board.casas));
+  boardClone.moveWR = JSON.parse(JSON.stringify(board.moveWR));
+  boardClone.moveBR = JSON.parse(JSON.stringify(board.moveBR));
+  boardClone.moveBTD = JSON.parse(JSON.stringify(board.moveBTD));
+  boardClone.moveBTE = JSON.parse(JSON.stringify(board.moveBTE));
+  boardClone.moveWTD = JSON.parse(JSON.stringify(board.moveWTD));
+  boardClone.moveWTE = JSON.parse(JSON.stringify(board.moveWTE));
+  boardClone.unPassantW = board.unPassantW? JSON.parse(JSON.stringify(board.unPassantW)) : undefined;
+  boardClone.unPassantB = board.unPassantB? JSON.parse(JSON.stringify(board.unPassantB)) : undefined;
+
+  return boardClone;
 }
 
 export function printBoard(board: number[][]) {
@@ -183,7 +188,7 @@ export function newGame(board: number[][]) {
   board[11] = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1];
 }
 
-export function checkXeque(board: number[][], jogadorAtual: number) {
+export function checkXeque(board: Board, jogadorAtual: number) {
   const jogadorOposto =
     jogadorAtual === Jogador["w"] ? Jogador["b"] : Jogador["w"];
   let hasRei = 0;
@@ -193,7 +198,7 @@ export function checkXeque(board: number[][], jogadorAtual: number) {
     for (let coluna = 0; coluna < 12; coluna++) {
       if (
         jogadorOposto === Jogador["w"] &&
-        board[linha][coluna] === Pieces["wR"]
+        board.casas[linha][coluna] === Pieces["wR"]
       ) {
         positionRei = [linha, coluna];
         hasRei++;
@@ -202,7 +207,7 @@ export function checkXeque(board: number[][], jogadorAtual: number) {
 
       if (
         jogadorOposto === Jogador["b"] &&
-        board[linha][coluna] === Pieces["bR"]
+        board.casas[linha][coluna] === Pieces["bR"]
       ) {
         positionRei = [linha, coluna];
         hasRei++;
@@ -219,10 +224,11 @@ export function checkXeque(board: number[][], jogadorAtual: number) {
     returnPositionAttacked: true,
   });
 
+
   const [linhaRei, colunaRei] = positionRei;
 
   for (const positionAtacada of positionAtacadas) {
-    const [linhaAtacada, colunaAtacada] = positionAtacada;
+    const [linhaAtacada, colunaAtacada] = positionAtacada as [number, number];
 
     if (linhaAtacada === linhaRei && colunaAtacada === colunaRei) {
       return true;
@@ -232,7 +238,7 @@ export function checkXeque(board: number[][], jogadorAtual: number) {
   return false;
 }
 
-export function checkXequeMate(board: number[][], jogadorAtual: number) {
+export function checkXequeMate(board: Board, jogadorAtual: number) {
   const isCheck = checkXeque(board, jogadorAtual);
 
   if (!isCheck) {
@@ -245,7 +251,7 @@ export function checkXequeMate(board: number[][], jogadorAtual: number) {
   const jogadasPossiveis = checkPossiveisNos(board, jogadorOposto);
 
   for (const jogadaPossivel of jogadasPossiveis) {
-    const isCheckAgain = checkXeque(jogadaPossivel as number[][], jogadorAtual);
+    const isCheckAgain = checkXeque(jogadaPossivel as Board, jogadorAtual);
 
     if (!isCheckAgain) {
       return false;
@@ -267,7 +273,7 @@ export function anunciarVencedor(jogadorAtual: number) {
 }
 
 export function checkRoque(
-  board: number[][],
+  board: Board,
   ladoRoque: number,
   jogador: number
 ) {
@@ -285,52 +291,52 @@ export function checkRoque(
   const [linhaRei, colunaRei] = positionRei;
   const [linhaTorre, colunaTorre] = positionTorre;
 
-  if (board[linhaRei][colunaRei] !== rei) {
+  if (board.casas[linhaRei][colunaRei] !== rei) {
     return false;
   }
 
-  if (board[linhaTorre][colunaTorre] !== torre) {
+  if (board.casas[linhaTorre][colunaTorre] !== torre) {
     return false;
   }
 
   if (ladoRoque === Roque["D"] && jogador === Jogador["w"]) {
-    if (board[2][7] !== Pieces["--"] || board[2][8] !== Pieces["--"]) {
+    if (board.casas[2][7] !== Pieces["--"] || board.casas[2][8] !== Pieces["--"]) {
       return false;
     }
 
-    if (wRMove || wDTMove) {
+    if (board.moveWR || board.moveWTD) {
       return false;
     }
   } else if (ladoRoque === Roque["D"] && jogador === Jogador["b"]) {
-    if (board[9][7] !== Pieces["--"] || board[9][8] !== Pieces["--"]) {
+    if (board.casas[9][7] !== Pieces["--"] || board.casas[9][8] !== Pieces["--"]) {
       return false;
     }
 
-    if (bRMove || bDTMove) {
+    if (board.moveBR || board.moveBTD) {
       return false;
     }
   } else if (ladoRoque === Roque["E"] && jogador === Jogador["w"]) {
     if (
-      board[2][3] !== Pieces["--"] ||
-      board[2][4] !== Pieces["--"] ||
-      board[2][5] !== Pieces["--"]
+      board.casas[2][3] !== Pieces["--"] ||
+      board.casas[2][4] !== Pieces["--"] ||
+      board.casas[2][5] !== Pieces["--"]
     ) {
       return false;
     }
 
-    if (wRMove || wETMove) {
+    if (board.moveWR  || board.moveWTE) {
       return false;
     }
   } else if (ladoRoque === Roque["E"] && jogador === Jogador["b"]) {
     if (
-      board[9][3] !== Pieces["--"] ||
-      board[9][4] !== Pieces["--"] ||
-      board[9][5] !== Pieces["--"]
+      board.casas[9][3] !== Pieces["--"] ||
+      board.casas[9][4] !== Pieces["--"] ||
+      board.casas[9][5] !== Pieces["--"]
     ) {
       return false;
     }
 
-    if (bRMove || bETMove) {
+    if (board.moveBR || board.moveBTE) {
       return false;
     }
   }
@@ -342,7 +348,7 @@ export function checkRoque(
   });
 
   for (const casaAtacada of casasAtacadas) {
-    const [linhaAtacada, colunaAtacada] = casaAtacada;
+    const [linhaAtacada, colunaAtacada] = casaAtacada as [number, number];
 
     if (ladoRoque === Roque["D"] && jogador === Jogador["w"]) {
       if (
@@ -384,25 +390,4 @@ export function checkRoque(
   }
 
   return true;
-}
-
-export function checkUnPassant(board: number[][], posicaoOrigem: [number, number], posicaoDestino: [number, number]) {
-    const [linhaOrigem, colunaOrigem] = posicaoOrigem;
-    const [linhaDestino, colunaDestino] = posicaoOrigem;
-
-    if(board[linhaDestino][colunaDestino] === Pieces["wP"]) {
-      if(linhaDestino === linhaOrigem + 1 && 
-        (colunaDestino === colunaOrigem + 1 || colunaDestino === colunaOrigem - 1)) {
-        return posicaoDestino;
-      }
-    }
-
-    if(board[linhaDestino][colunaDestino] === Pieces["bP"]) {
-      if(linhaDestino === linhaOrigem - 1 && 
-        (colunaDestino === colunaOrigem + 1 || colunaDestino === colunaOrigem - 1)) {
-        return posicaoDestino;
-      }
-    }
-
-    return false;
 }

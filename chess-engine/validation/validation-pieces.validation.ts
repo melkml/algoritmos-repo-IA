@@ -1,24 +1,26 @@
-import {Pieces} from '../libs'
+import { Pieces } from "../libs";
+import { Board } from "../types";
 
 export let checkPositionValid: any = [];
 
 checkPositionValid[Pieces["wP"]] = (
-  board: number[][],
+  board: Board,
   linhaOrigem: number,
   colunaOrigem: number,
   linhaDestino: number,
-  colunaDestino: number
+  colunaDestino: number,
+  canUnPassant?: boolean,
 ) => {
   // diagonal direita
   if (linhaDestino === linhaOrigem + 1 && colunaDestino === colunaOrigem + 1) {
-    if (board[linhaDestino][colunaDestino] > 6) {
+    if (board.casas[linhaDestino][colunaDestino] > 6) {
       return true;
     }
   }
 
   // diagonal esquerda
   if (linhaDestino === linhaOrigem + 1 && colunaDestino === colunaOrigem - 1) {
-    if (board[linhaDestino][colunaDestino] > 6) {
+    if (board.casas[linhaDestino][colunaDestino] > 6) {
       return true;
     }
   }
@@ -27,7 +29,7 @@ checkPositionValid[Pieces["wP"]] = (
   if (
     linhaDestino === linhaOrigem + 1 &&
     colunaDestino === colunaOrigem &&
-    board[linhaDestino][colunaDestino] === Pieces["--"]
+    board.casas[linhaDestino][colunaDestino] === Pieces["--"]
   ) {
     return true;
   }
@@ -36,26 +38,50 @@ checkPositionValid[Pieces["wP"]] = (
     linhaOrigem === 3 &&
     linhaDestino === linhaOrigem + 2 &&
     colunaDestino === colunaOrigem &&
-    board[linhaDestino][colunaDestino] === Pieces["--"]
+    board.casas[linhaDestino][colunaDestino] === Pieces["--"]
   ) {
     return true;
+  }
+
+  //validaçao de un passant
+  if (board.unPassantB) {
+    const [linhaUnPassant, colunaUnPassant] = board.unPassantB;
+
+    if (
+      linhaUnPassant === linhaDestino - 1 &&
+      linhaOrigem === linhaUnPassant &&
+      colunaDestino === colunaUnPassant
+    ) {
+      return canUnPassant? [true] : true;
+    }
+
+    if (
+      linhaUnPassant === linhaDestino - 2 &&
+      linhaOrigem === linhaUnPassant + 1 &&
+      colunaDestino === colunaUnPassant &&
+      (colunaOrigem === colunaUnPassant + 1 ||
+        colunaOrigem === colunaUnPassant - 1)
+    ) {
+      return canUnPassant? [true] : true;
+    }
   }
 
   return false;
 };
 
 checkPositionValid[Pieces["bP"]] = (
-  board: number[][],
+  board: Board,
   linhaOrigem: number,
   colunaOrigem: number,
   linhaDestino: number,
-  colunaDestino: number
+  colunaDestino: number,
+  canUnPassant?: boolean,
 ) => {
   // diagonal direita
   if (linhaDestino === linhaOrigem - 1 && colunaDestino === colunaOrigem + 1) {
     if (
-      board[linhaDestino][colunaDestino] < 7 &&
-      board[linhaDestino][colunaDestino] > 0
+      board.casas[linhaDestino][colunaDestino] < 7 &&
+      board.casas[linhaDestino][colunaDestino] > 0
     ) {
       return true;
     }
@@ -64,8 +90,8 @@ checkPositionValid[Pieces["bP"]] = (
   // diagonal esquerda
   if (linhaDestino === linhaOrigem - 1 && colunaDestino === colunaOrigem - 1) {
     if (
-      board[linhaDestino][colunaDestino] < 7 &&
-      board[linhaDestino][colunaDestino] > 0
+      board.casas[linhaDestino][colunaDestino] < 7 &&
+      board.casas[linhaDestino][colunaDestino] > 0
     ) {
       return true;
     }
@@ -75,7 +101,7 @@ checkPositionValid[Pieces["bP"]] = (
   if (
     linhaDestino === linhaOrigem - 1 &&
     colunaDestino === colunaOrigem &&
-    board[linhaDestino][colunaDestino] === Pieces["--"]
+    board.casas[linhaDestino][colunaDestino] === Pieces["--"]
   ) {
     return true;
   }
@@ -84,11 +110,37 @@ checkPositionValid[Pieces["bP"]] = (
     linhaOrigem === 8 &&
     linhaDestino === linhaOrigem - 2 &&
     colunaDestino === colunaOrigem &&
-    board[linhaDestino][colunaDestino] === Pieces["--"]
+    board.casas[linhaDestino][colunaDestino] === Pieces["--"]
   ) {
     return true;
   }
 
+  //validacao unPassant
+  if (board.unPassantW) {
+    const [linhaUnPassant, colunaUnPassant] = board.unPassantW;
+
+    if (
+      linhaUnPassant === linhaDestino + 1 &&
+      linhaOrigem === linhaUnPassant &&
+      colunaDestino === colunaUnPassant
+    ) {
+      
+      return canUnPassant? [true] : true;
+    }
+
+    if (
+      linhaUnPassant === linhaDestino + 2 &&
+      linhaOrigem === linhaUnPassant - 1 &&
+      colunaDestino === colunaUnPassant &&
+      (colunaOrigem === colunaUnPassant + 1 ||
+        colunaOrigem === colunaUnPassant - 1)
+    ) {
+      canUnPassant = true;
+      return canUnPassant? [true] : true;
+    }
+  }
+  
+  return false;
 };
 
 checkPositionValid[Pieces["wC"]] = (

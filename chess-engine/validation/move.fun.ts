@@ -151,6 +151,8 @@ export function movimentar(
     board.casas[linhaDestino][colunaDestino] = piecePromovida;
   }
 
+  //Sempre que uma movimento é feita, é verificado a ativações ou desativações de flags para
+  //validação de roque e un passant
   board.checkRoqueAfterMove(jogadorAtual as number);
 
   board.checkUnPassant();

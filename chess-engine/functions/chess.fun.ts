@@ -309,8 +309,6 @@ export function checkXequeMate(board: Board, jogadorAtual: number) {
     }
   }
 
-  console.log("Xeque-mate!");
-
   return true;
 }
 

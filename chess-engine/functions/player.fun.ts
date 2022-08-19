@@ -1,8 +1,151 @@
-import { checkXeque, clone, printBoard } from ".";
-import { Jogador, Pieces, Positions, Roque } from "../libs";
+import { checkXeque, checkXequeMate, clone, printBoard } from ".";
+import { Jogador, material, Pieces, Positions, Roque } from "../libs";
 import { Board } from "../types";
+import { checkPossiveisNos, movimentar } from "../validation";
 
 const promp = require("prompt-sync")();
+const maxDepth = 3;
+
+export function IA(board: Board, jogadorAtual: number) {
+  return melhorMovimento(board, jogadorAtual);
+}
+
+function melhorMovimento(board: Board, jogadorAtual: number) {
+  const jogadas = checkPossiveisNos(board, jogadorAtual);
+  var melhorUtilidade = Infinity;
+  var melhorPosicao = null;
+
+  for (let jogada of jogadas) {
+    const index = jogadas.indexOf(jogada as Board & [number, number]);
+ 
+    let utilidade = minmax(
+      jogada as Board,
+      jogadorAtual === Jogador["b"]? Jogador["w"] : jogadorAtual,
+      -Infinity,
+      Infinity,
+      0
+    );
+    console.log(utilidade);
+
+    if (utilidade < melhorUtilidade) {
+      melhorUtilidade = utilidade;
+      melhorPosicao = jogadas[index];
+    }
+  }
+  return melhorPosicao as Board;
+}
+
+export function checkNodeTerminal(board: Board, depth: number) {
+  let isTerminal =
+    checkXequeMate(board, Jogador["w"]) ||
+    checkXequeMate(board, Jogador["b"]) ||
+    depth === maxDepth ||
+    false;
+
+  return isTerminal;
+}
+
+export function minmax(
+  board: Board,
+  jogadorAtual: number,
+  alpha: number,
+  beta: number,
+  depth: number
+): number {
+  const nodesPossiveis = checkPossiveisNos(board, jogadorAtual);
+  const isTerminal = checkNodeTerminal(board, depth);
+  let utilidade: number;
+  
+  if (isTerminal) {
+   
+    return calcularUtilidade(board, jogadorAtual) as number;
+  }
+
+  if (jogadorAtual === Jogador["b"]) {
+    utilidade = -Infinity;
+
+    for (const no of nodesPossiveis) {
+      utilidade = max(
+        utilidade,
+        minmax(no as Board, Jogador["w"], alpha, beta, depth + 1)
+      );
+
+      alpha = max(alpha, utilidade);
+
+      if (beta <= alpha) {
+        break;
+      }
+    }
+
+
+    return utilidade;
+  }
+
+  utilidade = Infinity;
+
+  for (const no of nodesPossiveis) {
+    utilidade = min(
+      utilidade,
+      minmax(no as Board, Jogador["b"], alpha, beta, depth + 1)
+    );
+
+    beta = min(beta, utilidade);
+
+    if (beta <= alpha) {
+      break;
+    }
+  }
+
+ 
+  return utilidade;
+}
+
+export function calcularUtilidade(board: Board, jogadorAtual: number) {
+  const result = checkXequeMate(board, jogadorAtual);
+
+  const map: Record<string, number> = {
+    w: -10000,
+    b: 10000,
+  };
+
+  if (result) {
+    return map[jogadorAtual === Jogador["w"] ? "w" : "b"];
+  }
+  
+
+  let materialW = 0;
+  let materialB = 0;
+
+  for (let linha = 0; linha < 12; linha++) {
+    for (let coluna = 0; coluna < 12; coluna++) {
+      if (board.casas[linha][coluna] > 6) {
+        materialB += material[board.casas[linha][coluna]];
+      }
+
+      if (board.casas[linha][coluna] < 7 && board.casas[linha][coluna] > 0) {
+        materialW += material[board.casas[linha][coluna]];
+      }
+    }
+  }
+
+  return materialW - materialB;
+}
+
+function min(utilidade1: number, utilidade2: number) {
+  return utilidade1 < utilidade2
+    ? utilidade1
+    : utilidade1 === utilidade2
+    ? utilidade1
+    : utilidade2;
+}
+
+function max(utilidade1: number, utilidade2: number) {
+  return utilidade1 > utilidade2
+    ? utilidade1
+    : utilidade1 === utilidade2
+    ? utilidade1
+    : utilidade2;
+}
 
 export function humano(board: Board, jogador: number): any {
   let jogada: string = "";
@@ -78,11 +221,10 @@ export function humano(board: Board, jogador: number): any {
       continue;
     }
 
-
-    if(board.casas[linhaOrigem][colunaOrigem] === Pieces["--"]) {
+    if (board.casas[linhaOrigem][colunaOrigem] === Pieces["--"]) {
       console.log("Casa está vazia.");
       printBoard(board.casas, jogador, true);
-      continue
+      continue;
     }
 
     break;
@@ -116,35 +258,32 @@ export function escolherPromocao() {
   return Pieces[escolha];
 }
 
-export function IA(board: Board, jogadorAtual: number) {
-  return [0, 0];
-}
-
-export function checkJogadorHumano(
+export function checkJogador(
   jogadorHumano: number,
   jogadorAtual: number,
   board: Board
 ) {
+  if (jogadorHumano === Jogador["w"] && jogadorAtual === Jogador["w"]) {
+    return humano(board, jogadorAtual);
+  }
 
- if(jogadorHumano === Jogador["w"] && jogadorAtual === Jogador["w"]) {
-  return humano(board, jogadorAtual)
- }
+  if (jogadorHumano === Jogador["b"] && jogadorAtual === Jogador["b"]) {
+    return humano(board, jogadorAtual);
+  }
 
- if(jogadorHumano === Jogador["b"] && jogadorAtual === Jogador["b"]) {
-  return humano(board, jogadorAtual)
- }
-
-return humano(board, jogadorAtual); //TODO: mudar pra IA() quando for implementada.
+  return IA(board, jogadorAtual); 
 }
 
 export function escolherModoDeJogo() {
   let escolha;
 
-  while(!escolha) {
-    console.log("Escolha o modo de jogo:\n1 - HUMANO vs HUMANO\n2 - HUMANO vs MAQUINA");
-    escolha = promp()
+  while (!escolha) {
+    console.log(
+      "Escolha o modo de jogo:\n1 - HUMANO vs HUMANO\n2 - HUMANO vs MAQUINA"
+    );
+    escolha = promp();
 
-    if(escolha != "1" || escolha != "2") {
+    if (escolha != "1" || escolha != "2") {
       continue;
     }
 

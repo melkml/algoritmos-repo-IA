@@ -1,13 +1,17 @@
-import { Jogador } from "../libs";
+import { Jogador, Pieces, Positions, syncWriteFile } from "../libs";
 import {
   newGame,
   printBoard,
   checkXequeMate,
   anunciarVencedor,
-  checkJogadorHumano,
   escolherModoDeJogo,
+  checkJogador,
+  checkNodeTerminal,
+  minmax,
+  calcularUtilidade,
+  IA,
 } from "../functions";
-import { movimentar } from "../validation";
+import { checkPossiveisNos, movimentar } from "../validation";
 import { Board } from "../types";
 
 //? Main
@@ -17,26 +21,51 @@ let board: Board = new Board();
 let jogadaEscolhida;
 let jogadorAtual = Jogador["w"];
 
-const modo = escolherModoDeJogo();
-
-let jogadorHumano = Math.random() < 0.5 ? Jogador["w"] : Jogador["b"];
+let jogadorHumano = Jogador["w"];
+let jogadorHumano2;
+// Math.random() < 0.5 ? Jogador["w"] : Jogador["b"];
 
 let resultFinal = false;
 
 newGame(board.casas);
-// board.casas[3][6] = Pieces["--"];
-// board.casas[4][6] = Pieces["wP"];
-// board.casas[2][4] = Pieces["bT"];
 
-// checkPossiveisNos(board, Jogador['w']).forEach((node) => printBoard((node as Board).casas));
+board.casas[5][6] = board.casas[3][6];
+board.casas[7][4] = board.casas[9][3];
+board.casas[4][4] = board.casas[2][3];
+board.casas[6][6] = board.casas[8][6];
+board.casas[5][4] = board.casas[2][7];
+board.casas[6][4] = board.casas[9][7];
+board.casas[4][7] = board.casas[2][8];
+board.casas[7][7] = board.casas[9][8];
+board.casas[3][6] = Pieces["--"];
+board.casas[9][3] = Pieces["--"];
+board.casas[2][3] = Pieces["--"];
+board.casas[8][6] = Pieces["--"];
+board.casas[2][7] = Pieces["--"];
+board.casas[9][7] = Pieces["--"];
+board.casas[2][8] = Pieces["--"];
+board.casas[9][8] = Pieces["--"];
 
 while (!resultFinal) {
   if (jogadorAtual === Jogador["w"]) {
     printBoard(board.casas, jogadorAtual, true);
     console.log("Turno: Brancas");
-    jogadaEscolhida = checkJogadorHumano(jogadorHumano, jogadorAtual, board);
+
+    jogadorAtual = Jogador["w"];
+
+    jogadaEscolhida = checkJogador(jogadorHumano, jogadorAtual, board);
+
     const [piece, posicaoOrigem, posicaoDestino, isHumano, roque] =
       jogadaEscolhida;
+
+    const [a, b] = posicaoOrigem;
+    const [c, d] = posicaoDestino;
+
+    syncWriteFile(
+      "../src/jogadas.txt",
+      `board[${c}][${d}] = board[${a}][${b}]\n`,
+      { flag: "w" }
+    );
 
     let sucess = movimentar(
       jogadorAtual,
@@ -53,45 +82,52 @@ while (!resultFinal) {
       continue;
     }
   } else {
-    printBoard(board.casas, jogadorAtual, true);
+    printBoard(board.casas, Jogador["w"], true);
     console.log("Turno: Pretas");
 
-    jogadorHumano =
-      modo == "2"
-        ? jogadorHumano
-        : jogadorHumano === Jogador["w"]
-        ? Jogador["b"]
-        : jogadorHumano;
+    jogadaEscolhida = checkJogador(jogadorHumano, jogadorAtual, board);
 
-    jogadaEscolhida = checkJogadorHumano(jogadorHumano, jogadorAtual, board);
-    const [piece, posicaoOrigem, posicaoDestino, isHumano, roque] =
-      jogadaEscolhida;
+   if(jogadorHumano2) {
+      const [piece, posicaoOrigem, posicaoDestino, isHumano, roque] =
+        jogadaEscolhida;
 
-    let options;
-    if (roque) {
-      options = [roque, jogadorAtual];
-    }
+      const [a, b] = posicaoOrigem;
+      const [c, d] = posicaoDestino;
 
-    let sucess = movimentar(
-      jogadorAtual,
-      board,
-      piece,
-      posicaoOrigem,
-      posicaoDestino,
-      isHumano,
-      options as [number, number]
-    );
+      syncWriteFile(
+        "../src/jogadas.txt",
+        `board[${c}][${d}] = board[${a}][${b}]\n`,
+        { flag: "w" }
+      );
 
-    if (!sucess) {
-      console.log("Movimento inválido");
-      continue;
+      let options;
+      if (roque) {
+        options = [roque, jogadorAtual];
+      }
+
+      let sucess = movimentar(
+        jogadorAtual,
+        board,
+        piece,
+        posicaoOrigem,
+        posicaoDestino,
+        isHumano,
+        options as [number, number]
+      );
+
+      if (!sucess) {
+        console.log("Movimento inválido");
+        continue;
+      }
+    } else {
+      board = jogadaEscolhida;
     }
   }
 
   resultFinal = checkXequeMate(board, jogadorAtual);
 
-  if(resultFinal) {
-    printBoard(board.casas, jogadorAtual, true)
+  if (resultFinal) {
+    printBoard(board.casas, jogadorAtual, true);
   }
 
   jogadorAtual = jogadorAtual === Jogador["w"] ? Jogador["b"] : Jogador["w"];

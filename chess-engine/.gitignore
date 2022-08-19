@@ -2,7 +2,7 @@
 /dist
 /output
 /node_modules
-
+*.txt
 # IDE - VSCode
 .vscode/*
 !.vscode/settings.json

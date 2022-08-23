@@ -38,7 +38,8 @@ checkPositionValid[Pieces["wP"]] = (
     linhaOrigem === 3 &&
     linhaDestino === linhaOrigem + 2 &&
     colunaDestino === colunaOrigem &&
-    board.casas[linhaDestino][colunaDestino] === Pieces["--"]
+    board.casas[linhaDestino - 1][colunaDestino] === Pieces["--"] &&
+      board.casas[linhaDestino -1][colunaDestino] === Pieces["--"]
   ) {
     return true;
   }
@@ -110,7 +111,8 @@ checkPositionValid[Pieces["bP"]] = (
     linhaOrigem === 8 &&
     linhaDestino === linhaOrigem - 2 &&
     colunaDestino === colunaOrigem &&
-    board.casas[linhaDestino][colunaDestino] === Pieces["--"]
+    board.casas[linhaDestino][colunaDestino] === Pieces["--"]  &&
+      board.casas[linhaOrigem - 1][colunaDestino] === Pieces["--"]
   ) {
     return true;
   }

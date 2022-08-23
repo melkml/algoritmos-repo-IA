@@ -241,72 +241,75 @@ export function newGame(board: number[][]) {
   board[11] = [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1];
 }
 
+export const cache = new Map();
+
+export class teste {
+  static hits = 0;
+  static playCache = [0, 0];
+}
+
 export function checkXeque(board: Board, jogadorAtual: number) {
-  const jogadorOposto =
-    jogadorAtual === Jogador["w"] ? Jogador["b"] : Jogador["w"];
+const str = JSON.stringify(board).concat(jogadorAtual.toString());
 
-  let positionRei: [number, number] = [NaN, NaN];
+if(cache.has(str)) {
+  // throw new Error("Gay");
+  teste.hits++;
+  return cache.get(str);
+}
 
-  board.casas.find((linha, indexlinha) => {
+const result = avaliar(jogadorAtual, board);
 
-    return linha.find((piece, indexcoluna) => {
+teste.playCache[jogadorAtual]++;
 
-      if(piece < 1) return false;
+cache.set(str, result);
 
-      if(piece === Pieces["wR"] && jogadorOposto === Jogador["w"]) {
-        positionRei = [indexlinha, indexcoluna];
-        return true;
-      }
+return result;
 
-      if(piece === Pieces["bR"] && jogadorOposto === Jogador["b"]) {
-        positionRei = [indexlinha, indexcoluna];
-        return true;
-      }
+  // throw new Error("Rei não está no tabuleiro.");
+}
 
-      return false;
-
-    })});
-
-  // for (let linha = 2; linha < 10; linha++) {
-  //   for (let coluna = 2; coluna < 10; coluna++) {
-  //     if (
-  //       jogadorOposto === Jogador["w"] &&
-  //       board.casas[linha][coluna] === Pieces["wR"]
-  //     ) {
-  //       positionRei = [linha, coluna];
-  //       hasRei++;
-  //       break;
-  //     }
-  //
-  //     if (
-  //       jogadorOposto === Jogador["b"] &&
-  //       board.casas[linha][coluna] === Pieces["bR"]
-  //     ) {
-  //       positionRei = [linha, coluna];
-  //       hasRei++;
-  //       break;
-  //     }
-  //   }
-  //
-  //   if (hasRei) {
-  //     break;
-  //   }
-  // }
-
+function avaliar(jogadorAtual: number, board: Board) {
   const positionAtacadas = checkCasasAtacadas(board, jogadorAtual);
 
+  const jogadorOposto =
+      jogadorAtual === Jogador["w"] ? Jogador["b"] : Jogador["w"];
 
-  const [linhaRei, colunaRei] = positionRei;
 
-  for (const positionAtacada of positionAtacadas) {
-    const [linhaAtacada, colunaAtacada] = positionAtacada as [number, number];
+  for (let linha = 2; linha < 10; linha++) {
+    for (let coluna = 2; coluna < 10; coluna++) {
+      if (
+          jogadorOposto === Jogador["w"] &&
+          board.casas[linha][coluna] === Pieces["wR"]
+      ) {
 
-    if (linhaAtacada === linhaRei && colunaAtacada === colunaRei) {
-      return true;
+        for (const positionAtacada of positionAtacadas) {
+          const [linhaAtacada, colunaAtacada] = positionAtacada;
+
+          if(linhaAtacada === linha && colunaAtacada === coluna){
+            return true;
+          }
+
+        }
+
+        return false;
+      }
+
+      if (
+          jogadorOposto === Jogador["b"] &&
+          board.casas[linha][coluna] === Pieces["bR"]
+      ) {
+        for (const positionAtacada of positionAtacadas) {
+          const [linhaAtacada, colunaAtacada] = positionAtacada;
+
+          if(linhaAtacada === linha && colunaAtacada === coluna){
+            return true;
+          }
+
+        }
+        return false;
+      }
     }
   }
-
-  return false;
 }
 
 export function checkXequeMate(board: Board, jogadorAtual: number) {

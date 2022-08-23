@@ -6,99 +6,35 @@ import { Board } from "../types";
 export function checkCasasAtacadas(board: Board, jogador: number) {
   let casasAtacadas: [number, number][] = [];
 
-  for(const linha of board.casas) {
-    for(const piece of linha) {
-      if (piece < 1) {
+  for (let linha = 2; linha < 10; linha++) {
+    for (let coluna = 2; coluna < 10; coluna++) {
+      if (board.casas[linha][coluna] === Pieces["--"]) {
         continue;
       }
 
-      if (piece > 6 && jogador === 0) {
+      if (board.casas[linha][coluna] > 6 && jogador === Jogador["w"]) {
         continue;
       }
 
       if (
-          piece > 0 &&
-          piece < 7 &&
-          jogador === 1
+          board.casas[linha][coluna] > 0 &&
+          board.casas[linha][coluna] < 7 &&
+          jogador === Jogador["b"]
       ) {
         continue;
       }
 
-      const indexlinha = board.casas.indexOf(linha);
-      const indexcoluna = linha.indexOf(piece);
-
-      let jogadas = checkPossiveisJogadasByPiece[piece](
+      let jogadas = checkPossiveisJogadasByPiece[board.casas[linha][coluna]](
           jogador,
           board,
-          indexlinha,
-          indexcoluna,
+          linha,
+          coluna,
           true,
       );
 
       casasAtacadas.push(...jogadas);
     }
   }
-
-  // board.casas.forEach((linha, indexlinha) => {
-  //   linha.forEach((piece, indexcoluna) => {
-  //
-  //     if (piece < 1) {
-  //       return;
-  //     }
-  //
-  //     if (piece > 6 && jogador === 0) {
-  //       return;
-  //     }
-  //
-  //     if (
-  //         piece > 0 &&
-  //         piece < 7 &&
-  //         jogador === 1
-  //     ) {
-  //       return;
-  //     }
-  //
-  //     let jogadas = checkPossiveisJogadasByPiece[piece](
-  //         jogador,
-  //         board,
-  //         indexlinha,
-  //         indexcoluna,
-  //         true,
-  //     );
-  //
-  //     casasAtacadas.push(...jogadas);
-  //
-  //   })});
-
-  // for (let linha = 2; linha < 10; linha++) {
-  //   for (let coluna = 2; coluna < 10; coluna++) {
-  //     if (board.casas[linha][coluna] === Pieces["--"]) {
-  //       continue;
-  //     }
-  //
-  //     if (board.casas[linha][coluna] > 6 && jogador === Jogador["w"]) {
-  //       continue;
-  //     }
-  //
-  //     if (
-  //         board.casas[linha][coluna] > 0 &&
-  //         board.casas[linha][coluna] < 7 &&
-  //         jogador === Jogador["b"]
-  //     ) {
-  //       continue;
-  //     }
-  //
-  //     let jogadas = checkPossiveisJogadasByPiece[board.casas[linha][coluna]](
-  //         jogador,
-  //         board,
-  //         linha,
-  //         coluna,
-  //         true,
-  //     );
-  //
-  //     casasAtacadas.push(...jogadas);
-  //   }
-  // }
   return casasAtacadas;
 }
 
@@ -106,101 +42,37 @@ export function checkPossiveisNos(
   board: Board,
   jogador: number,
 ): Board[] {
-  let jogadasPossiveis = [];
+  let jogadasPossiveis: Board[] = [];
 
-  for(const linha of board.casas) {
-    for(const piece of linha) {
-      if (piece < 1) {
+  for (let linha = 2; linha < 10; linha++) {
+    for (let coluna = 2; coluna < 10; coluna++) {
+      if (board.casas[linha][coluna] < 1) {
         continue;
       }
 
-      if (piece > 6 && jogador === 0) {
+      if (board.casas[linha][coluna] > 6 && jogador === 0) {
         continue;
       }
 
       if (
-          piece > 0 &&
-          piece < 7 &&
-          jogador === 1
+        board.casas[linha][coluna] > 0 &&
+        board.casas[linha][coluna] < 7 &&
+        jogador === 1
       ) {
         continue;
       }
 
-      const indexlinha = board.casas.indexOf(linha);
-      const indexcoluna = linha.indexOf(piece);
-
-      let jogadas = checkPossiveisJogadasByPiece[piece](
-          jogador,
-          board,
-          indexlinha,
-          indexcoluna,
-          false,
+      let jogadas = checkPossiveisJogadasByPiece[board.casas[linha][coluna]](
+        jogador,
+        board,
+        linha,
+        coluna,
+        false
       );
 
       jogadasPossiveis.push(...jogadas);
     }
   }
-
-  // board.casas.forEach((linha, indexlinha) => {
-  //   linha.forEach((piece, indexcoluna) => {
-  //
-  //     if (piece < 1) {
-  //       return;
-  //     }
-  //
-  //     if (piece > 6 && jogador === 0) {
-  //       return;
-  //     }
-  //
-  //     if (
-  //         piece > 0 &&
-  //         piece < 7 &&
-  //         jogador === 1
-  //     ) {
-  //       return;
-  //     }
-  //
-  //     let jogadas = checkPossiveisJogadasByPiece[piece](
-  //         jogador,
-  //         board,
-  //         indexlinha,
-  //         indexcoluna,
-  //         false
-  //     );
-  //
-  //     jogadasPossiveis.push(...jogadas);
-  //
-  //   })});
-
-  // for (let linha = 2; linha < 10; linha++) {
-  //   for (let coluna = 2; coluna < 10; coluna++) {
-  //     if (board.casas[linha][coluna] < 1) {
-  //       continue;
-  //     }
-  //
-  //     if (board.casas[linha][coluna] > 6 && jogador === 0) {
-  //       continue;
-  //     }
-  //
-  //     if (
-  //       board.casas[linha][coluna] > 0 &&
-  //       board.casas[linha][coluna] < 7 &&
-  //       jogador === 1
-  //     ) {
-  //       continue;
-  //     }
-  //
-  //     let jogadas = checkPossiveisJogadasByPiece[board.casas[linha][coluna]](
-  //       jogador,
-  //       board,
-  //       linha,
-  //       coluna,
-  //       false
-  //     );
-  //
-  //     jogadasPossiveis.push(...jogadas);
-  //   }
-  // }
 
   let boardCCopy = clone(board);
 

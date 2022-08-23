@@ -11,10 +11,9 @@ export function IA(board: Board, jogadorAtual: number) {
   let utilidade = null;
   let melhorUtilidade = Infinity;
   let melhorJogada = null;
-  let vez = 0;
 
   for (const jogada of jogadasPossiveis) {
-    console.log("Vezes:", vez++)
+
     utilidade = minmax(board, Jogador["w"], -Infinity, Infinity, 0);
 
     if(utilidade < melhorUtilidade) {

@@ -6,9 +6,8 @@ import {
   anunciarVencedor,
   escolherModoDeJogo,
   checkJogador,
-  minmax,
   calcularUtilidade,
-  IA, checkXeque,
+  IA, checkXeque, minmax, teste, cache,
 } from "../functions";
 import {checkCasasAtacadas, checkPossiveisJogadasByPiece, checkPossiveisNos, movimentar} from "../validation";
 import { Board } from "../types";
@@ -47,84 +46,76 @@ board.casas[9][8] = Pieces["--"];
 
 printBoard(board.casas, Jogador["w"], true);
 
-console.time("Tempo:")
-const resultado = IA(board, Jogador["b"])
-console.timeEnd("Tempo:")
+while (!resultFinal) {
+  if (jogadorAtual === Jogador["w"]) {
+    printBoard(board.casas, jogadorAtual, true);
+    console.log("Turno: Brancas");
 
-console.log("finalizou");
-printBoard(resultado.casas, Jogador["w"], true);
+    jogadorAtual = Jogador["w"];
 
+    jogadaEscolhida = checkJogador(jogadorHumano, jogadorAtual, board);
 
-// while (!resultFinal) {
-//   if (jogadorAtual === Jogador["w"]) {
-//     printBoard(board.casas, jogadorAtual, true);
-//     console.log("Turno: Brancas");
-//
-//     jogadorAtual = Jogador["w"];
-//
-//     jogadaEscolhida = checkJogador(jogadorHumano, jogadorAtual, board);
-//
-//     const [piece, posicaoOrigem, posicaoDestino, isHumano, roque] =
-//       jogadaEscolhida;
-//
-//     let sucess = movimentar(
-//       jogadorAtual,
-//       board,
-//       piece,
-//       posicaoOrigem,
-//       posicaoDestino,
-//       isHumano,
-//       [roque, jogadorAtual]
-//     );
-//
-//     if (!sucess) {
-//       console.log("Movimento inválido");
-//       continue;
-//     }
-//   } else {
-//     printBoard(board.casas, Jogador["w"], true);
-//     console.log("Turno: Pretas");
-//
-//     jogadaEscolhida = checkJogador(jogadorHumano, jogadorAtual, board);
-//
-//    if(jogadorHumano2) {
-//       const [piece, posicaoOrigem, posicaoDestino, isHumano, roque] =
-//         jogadaEscolhida;
-//
-//       let options;
-//       if (roque) {
-//         options = [roque, jogadorAtual];
-//       }
-//
-//       let sucess = movimentar(
-//         jogadorAtual,
-//         board,
-//         piece,
-//         posicaoOrigem,
-//         posicaoDestino,
-//         isHumano,
-//         options as [number, number]
-//       );
-//
-//       if (!sucess) {
-//         console.log("Movimento inválido");
-//         continue;
-//       }
-//     } else {
-//       board = jogadaEscolhida;
-//     }
-//   }
-//
-//   resultFinal = checkXequeMate(board, jogadorAtual);
-//
-//   if (resultFinal) {
-//     printBoard(board.casas, jogadorAtual, true);
-//   }
-//
-//   jogadorAtual = jogadorAtual === Jogador["w"] ? Jogador["b"] : Jogador["w"];
-// }
-//
-// anunciarVencedor(jogadorAtual === Jogador["w"] ? Jogador["b"] : Jogador["w"]);
+    const [piece, posicaoOrigem, posicaoDestino, isHumano, roque] =
+      jogadaEscolhida;
+
+    let sucess = movimentar(
+      jogadorAtual,
+      board,
+      piece,
+      posicaoOrigem,
+      posicaoDestino,
+      isHumano,
+      [roque, jogadorAtual]
+    );
+
+    if (!sucess) {
+      console.log("Movimento inválido");
+      continue;
+    }
+  } else {
+    printBoard(board.casas, Jogador["w"], true);
+    console.log("Turno: Pretas");
+
+    jogadaEscolhida = checkJogador(jogadorHumano, jogadorAtual, board);
+
+   if(jogadorHumano2) {
+      const [piece, posicaoOrigem, posicaoDestino, isHumano, roque] =
+        jogadaEscolhida;
+
+      let options;
+      if (roque) {
+        options = [roque, jogadorAtual];
+      }
+
+      let sucess = movimentar(
+        jogadorAtual,
+        board,
+        piece,
+        posicaoOrigem,
+        posicaoDestino,
+        isHumano,
+        options as [number, number]
+      );
+
+      if (!sucess) {
+        console.log("Movimento inválido");
+        continue;
+      }
+    } else {
+      board = jogadaEscolhida;
+    }
+  }
+
+  resultFinal = checkXequeMate(board, jogadorAtual);
+
+  if (resultFinal) {
+    printBoard(board.casas, jogadorAtual, true);
+  }
+
+  jogadorAtual = jogadorAtual === Jogador["w"] ? Jogador["b"] : Jogador["w"];
+}
+
+anunciarVencedor(jogadorAtual === Jogador["w"] ? Jogador["b"] : Jogador["w"]);
 
 // /**
 //  * Recebe uma posição e um tabuleiro, retorna a peça relativa a posição.

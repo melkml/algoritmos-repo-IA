@@ -4,7 +4,7 @@ import {Board} from "../types";
 import {checkPossiveisJogadasByPiece, checkPossiveisNos} from "../validation";
 
 const promp = require("prompt-sync")();
-const maxDepth = 3;
+let maxDepth = 3;
 
 export function IA(board: Board, jogadorAtual: number) {
  const jogadasPossiveis = checkPossiveisNos(board, jogadorAtual);
@@ -23,7 +23,7 @@ export function IA(board: Board, jogadorAtual: number) {
     }
  }
 
-  return melhorJogada as Board;
+  return melhorJogada;
 }
 
 export function minmax(
@@ -48,7 +48,7 @@ export function minmax(
     for (const no of nodesPossiveis) {
       utilidade = Math.max(
         utilidade,
-        minmax(no as Board, Jogador["b"], alpha, beta, depth + 1)
+        minmax(no, Jogador["b"], alpha, beta, depth + 1)
       );
 
       alpha = Math.max(alpha, utilidade);
@@ -59,60 +59,41 @@ export function minmax(
     }
 
     return utilidade;
-  }
+  } else {
+    utilidade = Infinity;
 
-  utilidade = Infinity;
+    for (const no of nodesPossiveis) {
+      utilidade = Math.min(
+          utilidade,
+          minmax(no, Jogador["w"], alpha, beta, depth + 1)
+      );
 
-  for (const no of nodesPossiveis) {
-    utilidade = Math.min(
-      utilidade,
-      minmax(no as Board, Jogador["w"], alpha, beta, depth + 1)
-    );
+      beta = Math.min(beta, utilidade);
 
-    beta = Math.min(beta, utilidade);
-
-    if (beta <= alpha) {
-      break;
+      if (beta <= alpha) {
+        break;
+      }
     }
+
+    return utilidade;
   }
- 
-  return utilidade;
 }
 
 export function calcularUtilidade(board: Board, jogadorAtual: number) {
   let materialW = 0;
   let materialB = 0;
 
+  for (let linha = 2; linha < 10; linha++) {
+    for (let coluna = 2; coluna < 10; coluna++) {
+      if (board.casas[linha][coluna] > 6) {
+        materialB += material[board.casas[linha][coluna]];
+      }
 
-  for(const linha of board.casas) {
-    for(const piece of linha) {
-      if(piece < 1) continue;
-
-      if(piece > 6) materialB += material[piece];
-      if(piece < 7 && piece > 0)  materialW += material[piece];
-
-    }}
-
-  // board.casas.forEach((linha) => {
-  //   linha.forEach((piece) => {
-  //
-  //     if(piece < 1) return
-  //
-  //     if(piece > 6) materialB += material[piece];
-  //     if(piece < 7 && piece > 0)  materialW += material[piece];
-  //   })});
-
-  // for (let linha = 2; linha < 10; linha++) {
-  //   for (let coluna = 2; coluna < 10; coluna++) {
-  //     if (board.casas[linha][coluna] > 6) {
-  //       materialB += material[board.casas[linha][coluna]];
-  //     }
-  //
-  //     if (board.casas[linha][coluna] < 7 && board.casas[linha][coluna] > 0) {
-  //       materialW += material[board.casas[linha][coluna]];
-  //     }
-  //   }
-  // }
+      if (board.casas[linha][coluna] < 7 && board.casas[linha][coluna] > 0) {
+        materialW += material[board.casas[linha][coluna]];
+      }
+    }
+  }
 
   return materialW - materialB;
 }

@@ -3,6 +3,9 @@
 /output
 /node_modules
 *.txt
+*.xml
+*.iml
+
 # IDE - VSCode
 .vscode/*
 !.vscode/settings.json

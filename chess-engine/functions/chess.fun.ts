@@ -1,19 +1,21 @@
-import { printPieces, Jogador, Pieces, Positions, Roque } from "../libs";
+import {printPieces, Jogador, Pieces, Positions, Roque, material} from "../libs";
 import { Board } from "../types";
-import { checkPossiveisNos } from "../validation/check-possiveis-nos.fun";
+import {checkCasasAtacadas, checkPossiveisNos} from "../validation/check-possiveis-nos.fun";
 
 export function clone(board: Board) {
   let boardClone = new Board();
+
+  const {casas, moveWR, moveBR, moveBTD, moveBTE, moveWTD, moveWTE, unPassantW, unPassantB} = JSON.parse(JSON.stringify(board));
   
-  boardClone.casas = JSON.parse(JSON.stringify(board.casas));
-  boardClone.moveWR = JSON.parse(JSON.stringify(board.moveWR));
-  boardClone.moveBR = JSON.parse(JSON.stringify(board.moveBR));
-  boardClone.moveBTD = JSON.parse(JSON.stringify(board.moveBTD));
-  boardClone.moveBTE = JSON.parse(JSON.stringify(board.moveBTE));
-  boardClone.moveWTD = JSON.parse(JSON.stringify(board.moveWTD));
-  boardClone.moveWTE = JSON.parse(JSON.stringify(board.moveWTE));
-  boardClone.unPassantW = board.unPassantW? JSON.parse(JSON.stringify(board.unPassantW)) : undefined;
-  boardClone.unPassantB = board.unPassantB? JSON.parse(JSON.stringify(board.unPassantB)) : undefined;
+  boardClone.casas = casas;
+  boardClone.moveWR = moveWR;
+  boardClone.moveBR = moveBR;
+  boardClone.moveBTD = moveBTD;
+  boardClone.moveBTE = moveBTE;
+  boardClone.moveWTD = moveWTD;
+  boardClone.moveWTE = moveWTE;
+  boardClone.unPassantW = unPassantW;
+  boardClone.unPassantB = unPassantB;
 
   return boardClone;
 }
@@ -242,38 +244,56 @@ export function newGame(board: number[][]) {
 export function checkXeque(board: Board, jogadorAtual: number) {
   const jogadorOposto =
     jogadorAtual === Jogador["w"] ? Jogador["b"] : Jogador["w"];
-  let hasRei = 0;
+
   let positionRei: [number, number] = [NaN, NaN];
 
-  for (let linha = 0; linha < 12; linha++) {
-    for (let coluna = 0; coluna < 12; coluna++) {
-      if (
-        jogadorOposto === Jogador["w"] &&
-        board.casas[linha][coluna] === Pieces["wR"]
-      ) {
-        positionRei = [linha, coluna];
-        hasRei++;
-        break;
+  board.casas.find((linha, indexlinha) => {
+
+    return linha.find((piece, indexcoluna) => {
+
+      if(piece < 1) return false;
+
+      if(piece === Pieces["wR"] && jogadorOposto === Jogador["w"]) {
+        positionRei = [indexlinha, indexcoluna];
+        return true;
       }
 
-      if (
-        jogadorOposto === Jogador["b"] &&
-        board.casas[linha][coluna] === Pieces["bR"]
-      ) {
-        positionRei = [linha, coluna];
-        hasRei++;
-        break;
+      if(piece === Pieces["bR"] && jogadorOposto === Jogador["b"]) {
+        positionRei = [indexlinha, indexcoluna];
+        return true;
       }
-    }
 
-    if (hasRei) {
-      break;
-    }
-  }
+      return false;
 
-  const positionAtacadas = checkPossiveisNos(board, jogadorAtual, {
-    returnPositionAttacked: true,
-  });
+    })});
+
+  // for (let linha = 2; linha < 10; linha++) {
+  //   for (let coluna = 2; coluna < 10; coluna++) {
+  //     if (
+  //       jogadorOposto === Jogador["w"] &&
+  //       board.casas[linha][coluna] === Pieces["wR"]
+  //     ) {
+  //       positionRei = [linha, coluna];
+  //       hasRei++;
+  //       break;
+  //     }
+  //
+  //     if (
+  //       jogadorOposto === Jogador["b"] &&
+  //       board.casas[linha][coluna] === Pieces["bR"]
+  //     ) {
+  //       positionRei = [linha, coluna];
+  //       hasRei++;
+  //       break;
+  //     }
+  //   }
+  //
+  //   if (hasRei) {
+  //     break;
+  //   }
+  // }
+
+  const positionAtacadas = checkCasasAtacadas(board, jogadorAtual);
 
 
   const [linhaRei, colunaRei] = positionRei;
@@ -392,9 +412,7 @@ export function checkRoque(
 
   const jogadorOposto = jogador === Jogador["w"] ? Jogador["b"] : Jogador["w"];
 
-  const casasAtacadas = checkPossiveisNos(board, jogadorOposto, {
-    returnPositionAttacked: true,
-  });
+  const casasAtacadas = checkCasasAtacadas(board, jogadorOposto);
 
   for (const casaAtacada of casasAtacadas) {
     const [linhaAtacada, colunaAtacada] = casaAtacada as [number, number];

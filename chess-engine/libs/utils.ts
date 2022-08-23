@@ -13,3 +13,7 @@ export function syncWriteFile(filename: string, data: any, options: {flag: "w" |
 
   return contents;
 }
+
+export function sleep(milliseconds: number) {
+  return new Promise(resolve => setTimeout(resolve, milliseconds))
+}

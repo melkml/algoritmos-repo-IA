@@ -1,4 +1,4 @@
-import { Jogador, Pieces, Positions, syncWriteFile } from "../libs";
+import {Jogador, Pieces, Positions, sleep, syncWriteFile} from "../libs";
 import {
   newGame,
   printBoard,
@@ -6,12 +6,11 @@ import {
   anunciarVencedor,
   escolherModoDeJogo,
   checkJogador,
-  checkNodeTerminal,
   minmax,
   calcularUtilidade,
-  IA,
+  IA, checkXeque,
 } from "../functions";
-import { checkPossiveisNos, movimentar } from "../validation";
+import {checkCasasAtacadas, checkPossiveisJogadasByPiece, checkPossiveisNos, movimentar} from "../validation";
 import { Board } from "../types";
 
 //? Main
@@ -46,94 +45,86 @@ board.casas[9][7] = Pieces["--"];
 board.casas[2][8] = Pieces["--"];
 board.casas[9][8] = Pieces["--"];
 
-while (!resultFinal) {
-  if (jogadorAtual === Jogador["w"]) {
-    printBoard(board.casas, jogadorAtual, true);
-    console.log("Turno: Brancas");
+printBoard(board.casas, Jogador["w"], true);
 
-    jogadorAtual = Jogador["w"];
+console.time("Tempo:")
+const resultado = IA(board, Jogador["b"])
+console.timeEnd("Tempo:")
 
-    jogadaEscolhida = checkJogador(jogadorHumano, jogadorAtual, board);
+console.log("finalizou");
+printBoard(resultado.casas, Jogador["w"], true);
 
-    const [piece, posicaoOrigem, posicaoDestino, isHumano, roque] =
-      jogadaEscolhida;
 
-    const [a, b] = posicaoOrigem;
-    const [c, d] = posicaoDestino;
-
-    syncWriteFile(
-      "../src/jogadas.txt",
-      `board[${c}][${d}] = board[${a}][${b}]\n`,
-      { flag: "w" }
-    );
-
-    let sucess = movimentar(
-      jogadorAtual,
-      board,
-      piece,
-      posicaoOrigem,
-      posicaoDestino,
-      isHumano,
-      [roque, jogadorAtual]
-    );
-
-    if (!sucess) {
-      console.log("Movimento inválido");
-      continue;
-    }
-  } else {
-    printBoard(board.casas, Jogador["w"], true);
-    console.log("Turno: Pretas");
-
-    jogadaEscolhida = checkJogador(jogadorHumano, jogadorAtual, board);
-
-   if(jogadorHumano2) {
-      const [piece, posicaoOrigem, posicaoDestino, isHumano, roque] =
-        jogadaEscolhida;
-
-      const [a, b] = posicaoOrigem;
-      const [c, d] = posicaoDestino;
-
-      syncWriteFile(
-        "../src/jogadas.txt",
-        `board[${c}][${d}] = board[${a}][${b}]\n`,
-        { flag: "w" }
-      );
-
-      let options;
-      if (roque) {
-        options = [roque, jogadorAtual];
-      }
-
-      let sucess = movimentar(
-        jogadorAtual,
-        board,
-        piece,
-        posicaoOrigem,
-        posicaoDestino,
-        isHumano,
-        options as [number, number]
-      );
-
-      if (!sucess) {
-        console.log("Movimento inválido");
-        continue;
-      }
-    } else {
-      board = jogadaEscolhida;
-    }
-  }
-
-  resultFinal = checkXequeMate(board, jogadorAtual);
-
-  if (resultFinal) {
-    printBoard(board.casas, jogadorAtual, true);
-  }
-
-  jogadorAtual = jogadorAtual === Jogador["w"] ? Jogador["b"] : Jogador["w"];
-}
-
-anunciarVencedor(jogadorAtual === Jogador["w"] ? Jogador["b"] : Jogador["w"]);
+// while (!resultFinal) {
+//   if (jogadorAtual === Jogador["w"]) {
+//     printBoard(board.casas, jogadorAtual, true);
+//     console.log("Turno: Brancas");
+//
+//     jogadorAtual = Jogador["w"];
+//
+//     jogadaEscolhida = checkJogador(jogadorHumano, jogadorAtual, board);
+//
+//     const [piece, posicaoOrigem, posicaoDestino, isHumano, roque] =
+//       jogadaEscolhida;
+//
+//     let sucess = movimentar(
+//       jogadorAtual,
+//       board,
+//       piece,
+//       posicaoOrigem,
+//       posicaoDestino,
+//       isHumano,
+//       [roque, jogadorAtual]
+//     );
+//
+//     if (!sucess) {
+//       console.log("Movimento inválido");
+//       continue;
+//     }
+//   } else {
+//     printBoard(board.casas, Jogador["w"], true);
+//     console.log("Turno: Pretas");
+//
+//     jogadaEscolhida = checkJogador(jogadorHumano, jogadorAtual, board);
+//
+//    if(jogadorHumano2) {
+//       const [piece, posicaoOrigem, posicaoDestino, isHumano, roque] =
+//         jogadaEscolhida;
+//
+//       let options;
+//       if (roque) {
+//         options = [roque, jogadorAtual];
+//       }
+//
+//       let sucess = movimentar(
+//         jogadorAtual,
+//         board,
+//         piece,
+//         posicaoOrigem,
+//         posicaoDestino,
+//         isHumano,
+//         options as [number, number]
+//       );
+//
+//       if (!sucess) {
+//         console.log("Movimento inválido");
+//         continue;
+//       }
+//     } else {
+//       board = jogadaEscolhida;
+//     }
+//   }
+//
+//   resultFinal = checkXequeMate(board, jogadorAtual);
+//
+//   if (resultFinal) {
+//     printBoard(board.casas, jogadorAtual, true);
+//   }
+//
+//   jogadorAtual = jogadorAtual === Jogador["w"] ? Jogador["b"] : Jogador["w"];
+// }
+//
+// anunciarVencedor(jogadorAtual === Jogador["w"] ? Jogador["b"] : Jogador["w"]);
 
 // /**
 //  * Recebe uma posição e um tabuleiro, retorna a peça relativa a posição.

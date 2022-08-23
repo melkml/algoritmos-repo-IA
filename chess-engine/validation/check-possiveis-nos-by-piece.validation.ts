@@ -12,6 +12,7 @@ checkPossiveisJogadasByPiece[Pieces["wP"]] = (
   coluna: number,
   returnPositionAttacked: boolean
 ) => {
+
   let jogadasPossiveis = [];
   let casasAtacadas = [];
   let boardCCopy = clone(boardC);
@@ -54,7 +55,7 @@ checkPossiveisJogadasByPiece[Pieces["wP"]] = (
 
   if (canMoveDiagonalDireita) {
     jogadasPossiveis.push(boardCCopy);
-    casasAtacadas.push([linha + 1, coluna + 1]);
+
   }
 
   boardCCopy = clone(boardC);
@@ -69,6 +70,13 @@ checkPossiveisJogadasByPiece[Pieces["wP"]] = (
 
   if (canMoveDiagonalEsquerda) {
     jogadasPossiveis.push(boardCCopy);
+  }
+
+  if(boardC.casas[linha + 1][coluna + 1] === Pieces["--"] || boardC.casas[linha + 1][coluna + 1] > 6) {
+    casasAtacadas.push([linha + 1, coluna + 1]);
+  }
+
+  if(boardC.casas[linha + 1][coluna - 1] === Pieces["--"] || boardC.casas[linha + 1][coluna - 1] > 6) {
     casasAtacadas.push([linha + 1, coluna - 1]);
   }
 
@@ -124,7 +132,6 @@ checkPossiveisJogadasByPiece[Pieces["bP"]] = (
 
   if (canMoveDiagonalDireita) {
     jogadasPossiveis.push(boardCCopy);
-    casasAtacadas.push([linha - 1, coluna - 1]);
   }
 
   boardCCopy = clone(boardC);
@@ -139,7 +146,14 @@ checkPossiveisJogadasByPiece[Pieces["bP"]] = (
 
   if (canMoveDiagonalEsquerda) {
     jogadasPossiveis.push(boardCCopy);
+  }
+
+  if(boardC.casas[linha - 1][coluna + 1] === Pieces["--"] || (boardC.casas[linha - 1][coluna + 1] < 7 && boardC.casas[linha - 1][coluna + 1] > 0)) {
     casasAtacadas.push([linha - 1, coluna + 1]);
+  }
+
+  if(boardC.casas[linha - 1][coluna - 1] === Pieces["--"] || (boardC.casas[linha - 1][coluna - 1] < 7 && boardC.casas[linha - 1][coluna - 1] > 0)) {
+    casasAtacadas.push([linha - 1, coluna - 1]);
   }
 
   return returnPositionAttacked ? casasAtacadas : jogadasPossiveis;

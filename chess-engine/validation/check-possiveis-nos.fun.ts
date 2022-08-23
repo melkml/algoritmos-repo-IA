@@ -1,56 +1,208 @@
-import { Jogador, Pieces, printPieces, Roque } from "../libs";
-import { checkXeque, clone, printBoard } from "../functions/chess.fun";
+import { Jogador, Pieces, Roque } from "../libs";
+import { checkXeque, clone } from "../functions";
 import { checkPossiveisJogadasByPiece, movimentar } from "../validation";
 import { Board } from "../types";
 
-interface OptionsCheckPossiveisNos {
-  returnPositionAttacked: boolean;
-}
+export function checkCasasAtacadas(board: Board, jogador: number) {
+  let casasAtacadas: [number, number][] = [];
 
-let contador = 0;
-
-export function checkPossiveisNos(
-  board: Board,
-  jogador: number,
-  options?: OptionsCheckPossiveisNos
-): Board[] | [number, number][] {
-  let jogadasPossiveis = [];
-
-  for (let linha = 0; linha < 12; linha++) {
-    for (let coluna = 0; coluna < 12; coluna++) {
-      if (board.casas[linha][coluna] < 1) {
+  for(const linha of board.casas) {
+    for(const piece of linha) {
+      if (piece < 1) {
         continue;
       }
 
-      if (board.casas[linha][coluna] > 6 && jogador === 0) {
+      if (piece > 6 && jogador === 0) {
         continue;
       }
 
       if (
-        board.casas[linha][coluna] > 0 &&
-        board.casas[linha][coluna] < 7 &&
-        jogador === 1
+          piece > 0 &&
+          piece < 7 &&
+          jogador === 1
       ) {
         continue;
       }
 
-      let jogadas = checkPossiveisJogadasByPiece[board.casas[linha][coluna]](
-        jogador,
-        board,
-        linha,
-        coluna,
-        options?.returnPositionAttacked
+      const indexlinha = board.casas.indexOf(linha);
+      const indexcoluna = linha.indexOf(piece);
+
+      let jogadas = checkPossiveisJogadasByPiece[piece](
+          jogador,
+          board,
+          indexlinha,
+          indexcoluna,
+          true,
+      );
+
+      casasAtacadas.push(...jogadas);
+    }
+  }
+
+  // board.casas.forEach((linha, indexlinha) => {
+  //   linha.forEach((piece, indexcoluna) => {
+  //
+  //     if (piece < 1) {
+  //       return;
+  //     }
+  //
+  //     if (piece > 6 && jogador === 0) {
+  //       return;
+  //     }
+  //
+  //     if (
+  //         piece > 0 &&
+  //         piece < 7 &&
+  //         jogador === 1
+  //     ) {
+  //       return;
+  //     }
+  //
+  //     let jogadas = checkPossiveisJogadasByPiece[piece](
+  //         jogador,
+  //         board,
+  //         indexlinha,
+  //         indexcoluna,
+  //         true,
+  //     );
+  //
+  //     casasAtacadas.push(...jogadas);
+  //
+  //   })});
+
+  // for (let linha = 2; linha < 10; linha++) {
+  //   for (let coluna = 2; coluna < 10; coluna++) {
+  //     if (board.casas[linha][coluna] === Pieces["--"]) {
+  //       continue;
+  //     }
+  //
+  //     if (board.casas[linha][coluna] > 6 && jogador === Jogador["w"]) {
+  //       continue;
+  //     }
+  //
+  //     if (
+  //         board.casas[linha][coluna] > 0 &&
+  //         board.casas[linha][coluna] < 7 &&
+  //         jogador === Jogador["b"]
+  //     ) {
+  //       continue;
+  //     }
+  //
+  //     let jogadas = checkPossiveisJogadasByPiece[board.casas[linha][coluna]](
+  //         jogador,
+  //         board,
+  //         linha,
+  //         coluna,
+  //         true,
+  //     );
+  //
+  //     casasAtacadas.push(...jogadas);
+  //   }
+  // }
+  return casasAtacadas;
+}
+
+export function checkPossiveisNos(
+  board: Board,
+  jogador: number,
+): Board[] {
+  let jogadasPossiveis = [];
+
+  for(const linha of board.casas) {
+    for(const piece of linha) {
+      if (piece < 1) {
+        continue;
+      }
+
+      if (piece > 6 && jogador === 0) {
+        continue;
+      }
+
+      if (
+          piece > 0 &&
+          piece < 7 &&
+          jogador === 1
+      ) {
+        continue;
+      }
+
+      const indexlinha = board.casas.indexOf(linha);
+      const indexcoluna = linha.indexOf(piece);
+
+      let jogadas = checkPossiveisJogadasByPiece[piece](
+          jogador,
+          board,
+          indexlinha,
+          indexcoluna,
+          false,
       );
 
       jogadasPossiveis.push(...jogadas);
     }
   }
 
-  let boardCCopy = clone(board);
+  // board.casas.forEach((linha, indexlinha) => {
+  //   linha.forEach((piece, indexcoluna) => {
+  //
+  //     if (piece < 1) {
+  //       return;
+  //     }
+  //
+  //     if (piece > 6 && jogador === 0) {
+  //       return;
+  //     }
+  //
+  //     if (
+  //         piece > 0 &&
+  //         piece < 7 &&
+  //         jogador === 1
+  //     ) {
+  //       return;
+  //     }
+  //
+  //     let jogadas = checkPossiveisJogadasByPiece[piece](
+  //         jogador,
+  //         board,
+  //         indexlinha,
+  //         indexcoluna,
+  //         false
+  //     );
+  //
+  //     jogadasPossiveis.push(...jogadas);
+  //
+  //   })});
 
-  if (options?.returnPositionAttacked) {
-    return jogadasPossiveis;
-  }
+  // for (let linha = 2; linha < 10; linha++) {
+  //   for (let coluna = 2; coluna < 10; coluna++) {
+  //     if (board.casas[linha][coluna] < 1) {
+  //       continue;
+  //     }
+  //
+  //     if (board.casas[linha][coluna] > 6 && jogador === 0) {
+  //       continue;
+  //     }
+  //
+  //     if (
+  //       board.casas[linha][coluna] > 0 &&
+  //       board.casas[linha][coluna] < 7 &&
+  //       jogador === 1
+  //     ) {
+  //       continue;
+  //     }
+  //
+  //     let jogadas = checkPossiveisJogadasByPiece[board.casas[linha][coluna]](
+  //       jogador,
+  //       board,
+  //       linha,
+  //       coluna,
+  //       false
+  //     );
+  //
+  //     jogadasPossiveis.push(...jogadas);
+  //   }
+  // }
+
+  let boardCCopy = clone(board);
 
   let canMove = movimentar(
     jogador,
@@ -86,20 +238,11 @@ export function checkPossiveisNos(
 
   const jogadorOposto = jogador === Jogador["w"] ? Jogador["b"] : Jogador["w"];
 
-  let jogadasPossiveisSemCravada = JSON.parse(JSON.stringify(jogadasPossiveis));
-
-  for (const jogada of jogadasPossiveis) {
+  jogadasPossiveis = jogadasPossiveis.filter((jogada) => {
     const isCheck = checkXeque(jogada, jogadorOposto);
 
-    if (isCheck) {
-      const index: number = jogadasPossiveis.indexOf(jogada);
-      jogadasPossiveisSemCravada.splice(index, 1, null);
-    }
-  }
-
-  jogadasPossiveis = jogadasPossiveisSemCravada.filter(
-    (node: Board) => node !== null
-  );
+    return !isCheck;
+  })
 
   return jogadasPossiveis;
 }

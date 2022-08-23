@@ -1,48 +1,29 @@
-import { checkXeque, checkXequeMate, clone, printBoard } from ".";
-import { Jogador, material, Pieces, Positions, Roque } from "../libs";
-import { Board } from "../types";
-import { checkPossiveisNos, movimentar } from "../validation";
+import {checkXeque, checkXequeMate, clone, printBoard} from ".";
+import {Jogador, material, Pieces, Positions, Roque} from "../libs";
+import {Board} from "../types";
+import {checkPossiveisJogadasByPiece, checkPossiveisNos} from "../validation";
 
 const promp = require("prompt-sync")();
 const maxDepth = 3;
 
 export function IA(board: Board, jogadorAtual: number) {
-  return melhorMovimento(board, jogadorAtual);
-}
+ const jogadasPossiveis = checkPossiveisNos(board, jogadorAtual);
+  let utilidade = null;
+  let melhorUtilidade = Infinity;
+  let melhorJogada = null;
+  let vez = 0;
 
-function melhorMovimento(board: Board, jogadorAtual: number) {
-  const jogadas = checkPossiveisNos(board, jogadorAtual);
-  var melhorUtilidade = Infinity;
-  var melhorPosicao = null;
+  for (const jogada of jogadasPossiveis) {
+    console.log("Vezes:", vez++)
+    utilidade = minmax(board, Jogador["w"], -Infinity, Infinity, 0);
 
-  for (let jogada of jogadas) {
-    const index = jogadas.indexOf(jogada as Board & [number, number]);
- 
-    let utilidade = minmax(
-      jogada as Board,
-      jogadorAtual === Jogador["b"]? Jogador["w"] : jogadorAtual,
-      -Infinity,
-      Infinity,
-      0
-    );
-    console.log(utilidade);
-
-    if (utilidade < melhorUtilidade) {
+    if(utilidade < melhorUtilidade) {
       melhorUtilidade = utilidade;
-      melhorPosicao = jogadas[index];
+      melhorJogada = jogada;
     }
-  }
-  return melhorPosicao as Board;
-}
+ }
 
-export function checkNodeTerminal(board: Board, depth: number) {
-  let isTerminal =
-    checkXequeMate(board, Jogador["w"]) ||
-    checkXequeMate(board, Jogador["b"]) ||
-    depth === maxDepth ||
-    false;
-
-  return isTerminal;
+  return melhorJogada as Board;
 }
 
 export function minmax(
@@ -52,31 +33,30 @@ export function minmax(
   beta: number,
   depth: number
 ): number {
-  const nodesPossiveis = checkPossiveisNos(board, jogadorAtual);
-  const isTerminal = checkNodeTerminal(board, depth);
-  let utilidade: number;
-  
-  if (isTerminal) {
-   
+
+  if (depth === maxDepth) {
     return calcularUtilidade(board, jogadorAtual) as number;
   }
 
-  if (jogadorAtual === Jogador["b"]) {
+  let nodesPossiveis = checkPossiveisNos(board, jogadorAtual);
+
+  let utilidade: number;
+
+  if (jogadorAtual === Jogador["w"]) {
     utilidade = -Infinity;
 
     for (const no of nodesPossiveis) {
-      utilidade = max(
+      utilidade = Math.max(
         utilidade,
-        minmax(no as Board, Jogador["w"], alpha, beta, depth + 1)
+        minmax(no as Board, Jogador["b"], alpha, beta, depth + 1)
       );
 
-      alpha = max(alpha, utilidade);
+      alpha = Math.max(alpha, utilidade);
 
       if (beta <= alpha) {
         break;
       }
     }
-
 
     return utilidade;
   }
@@ -84,68 +64,59 @@ export function minmax(
   utilidade = Infinity;
 
   for (const no of nodesPossiveis) {
-    utilidade = min(
+    utilidade = Math.min(
       utilidade,
-      minmax(no as Board, Jogador["b"], alpha, beta, depth + 1)
+      minmax(no as Board, Jogador["w"], alpha, beta, depth + 1)
     );
 
-    beta = min(beta, utilidade);
+    beta = Math.min(beta, utilidade);
 
     if (beta <= alpha) {
       break;
     }
   }
-
  
   return utilidade;
 }
 
 export function calcularUtilidade(board: Board, jogadorAtual: number) {
-  const result = checkXequeMate(board, jogadorAtual);
-
-  const map: Record<string, number> = {
-    w: -10000,
-    b: 10000,
-  };
-
-  if (result) {
-    return map[jogadorAtual === Jogador["w"] ? "w" : "b"];
-  }
-  
-
   let materialW = 0;
   let materialB = 0;
 
-  for (let linha = 0; linha < 12; linha++) {
-    for (let coluna = 0; coluna < 12; coluna++) {
-      if (board.casas[linha][coluna] > 6) {
-        materialB += material[board.casas[linha][coluna]];
-      }
 
-      if (board.casas[linha][coluna] < 7 && board.casas[linha][coluna] > 0) {
-        materialW += material[board.casas[linha][coluna]];
-      }
-    }
-  }
+  for(const linha of board.casas) {
+    for(const piece of linha) {
+      if(piece < 1) continue;
+
+      if(piece > 6) materialB += material[piece];
+      if(piece < 7 && piece > 0)  materialW += material[piece];
+
+    }}
+
+  // board.casas.forEach((linha) => {
+  //   linha.forEach((piece) => {
+  //
+  //     if(piece < 1) return
+  //
+  //     if(piece > 6) materialB += material[piece];
+  //     if(piece < 7 && piece > 0)  materialW += material[piece];
+  //   })});
+
+  // for (let linha = 2; linha < 10; linha++) {
+  //   for (let coluna = 2; coluna < 10; coluna++) {
+  //     if (board.casas[linha][coluna] > 6) {
+  //       materialB += material[board.casas[linha][coluna]];
+  //     }
+  //
+  //     if (board.casas[linha][coluna] < 7 && board.casas[linha][coluna] > 0) {
+  //       materialW += material[board.casas[linha][coluna]];
+  //     }
+  //   }
+  // }
 
   return materialW - materialB;
 }
 
-function min(utilidade1: number, utilidade2: number) {
-  return utilidade1 < utilidade2
-    ? utilidade1
-    : utilidade1 === utilidade2
-    ? utilidade1
-    : utilidade2;
-}
-
-function max(utilidade1: number, utilidade2: number) {
-  return utilidade1 > utilidade2
-    ? utilidade1
-    : utilidade1 === utilidade2
-    ? utilidade1
-    : utilidade2;
-}
 
 export function humano(board: Board, jogador: number): any {
   let jogada: string = "";

@@ -14,7 +14,7 @@ export function IA(board: Board, jogadorAtual: number) {
 
   for (const jogada of jogadasPossiveis) {
 
-    utilidade = minmax(board, Jogador["w"], -Infinity, Infinity, 0);
+    utilidade = minmax(jogada, Jogador["w"], -Infinity, Infinity, 0);
 
     if(utilidade < melhorUtilidade) {
       melhorUtilidade = utilidade;
@@ -22,7 +22,7 @@ export function IA(board: Board, jogadorAtual: number) {
     }
  }
 
-  return melhorJogada;
+  return melhorJogada as Board;
 }
 
 export function minmax(

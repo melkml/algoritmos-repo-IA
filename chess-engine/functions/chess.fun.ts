@@ -1,6 +1,6 @@
 import {printPieces, Jogador, Pieces, Positions, Roque, material} from "../libs";
 import { Board } from "../types";
-import {checkCasasAtacadas, checkPossiveisNos} from "../validation/check-possiveis-nos.fun";
+import {checkCasasAtacadas, checkPossiveisNos} from "../validation";
 
 export function clone(board: Board) {
   let boardClone = new Board();
@@ -14,8 +14,14 @@ export function clone(board: Board) {
   boardClone.moveBTE = moveBTE;
   boardClone.moveWTD = moveWTD;
   boardClone.moveWTE = moveWTE;
-  boardClone.unPassantW = unPassantW;
-  boardClone.unPassantB = unPassantB;
+
+  if(unPassantW) {
+    boardClone.unPassantW = unPassantW;
+  }
+
+  if(unPassantB) {
+    boardClone.unPassantB = unPassantB;
+  }
 
   return boardClone;
 }

@@ -1,7 +1,9 @@
-import {checkXeque, checkXequeMate, clone, printBoard} from ".";
+import {checkXeque, clone, printBoard} from ".";
 import {Jogador, material, Pieces, Positions, Roque} from "../libs";
 import {Board} from "../types";
 import {checkPossiveisJogadasByPiece, checkPossiveisNos} from "../validation";
+import {calcularUtilidade} from "../evaluation";
+import * as util from "util";
 
 const promp = require("prompt-sync")();
 let maxDepth = 3;
@@ -13,13 +15,13 @@ export function IA(board: Board, jogadorAtual: number) {
   let melhorJogada = null;
 
   for (const jogada of jogadasPossiveis) {
-
     utilidade = minmax(jogada, Jogador["w"], -Infinity, Infinity, 0);
 
     if(utilidade < melhorUtilidade) {
       melhorUtilidade = utilidade;
       melhorJogada = jogada;
     }
+
  }
 
   return melhorJogada as Board;
@@ -34,7 +36,9 @@ export function minmax(
 ): number {
 
   if (depth === maxDepth) {
-    return calcularUtilidade(board, jogadorAtual) as number;
+    const utilidade = calcularUtilidade(board) as number;
+
+    return utilidade;
   }
 
   let nodesPossiveis = checkPossiveisNos(board, jogadorAtual);
@@ -76,25 +80,6 @@ export function minmax(
 
     return utilidade;
   }
-}
-
-export function calcularUtilidade(board: Board, jogadorAtual: number) {
-  let materialW = 0;
-  let materialB = 0;
-
-  for (let linha = 2; linha < 10; linha++) {
-    for (let coluna = 2; coluna < 10; coluna++) {
-      if (board.casas[linha][coluna] > 6) {
-        materialB += material[board.casas[linha][coluna]];
-      }
-
-      if (board.casas[linha][coluna] < 7 && board.casas[linha][coluna] > 0) {
-        materialW += material[board.casas[linha][coluna]];
-      }
-    }
-  }
-
-  return materialW - materialB;
 }
 
 

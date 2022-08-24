@@ -18,11 +18,11 @@ export function clone(board: Board) {
   boardClone.moveWTE = board.moveWTE;
 
   if(board.unPassantW) {
-    boardClone.unPassantW = board.unPassantW;
+      boardClone.unPassantW = board.unPassantW.slice(0) as [number, number];
   }
 
   if(board.unPassantB) {
-    boardClone.unPassantB = board.unPassantB;
+      boardClone.unPassantB = board.unPassantB.slice(0) as [number, number];
   }
 
   return boardClone;
@@ -253,19 +253,21 @@ export const cache = new Map();
 
 export class teste {
   static hits = 0;
+  static call = 0;
   static playCache = [0, 0];
 }
 
-export function checkXeque(board: Board, jogadorAtual: number) {
+export function checkXequeWithCache(board: Board, jogadorAtual: number) {
 const str = JSON.stringify(board).concat(jogadorAtual.toString());
 
 if(cache.has(str)) {
-  // throw new Error("Gay");
+  // throw new Error();
   teste.hits++;
   return cache.get(str);
 }
 
-const result = avaliar(jogadorAtual, board);
+teste.call++;
+const result = checkXeque(board, jogadorAtual);
 
 teste.playCache[jogadorAtual]++;
 
@@ -276,7 +278,7 @@ return result;
   // throw new Error("Rei não está no tabuleiro.");
 }
 
-function avaliar(jogadorAtual: number, board: Board) {
+export function checkXeque(board: Board, jogadorAtual: number, ) {
   const positionAtacadas = checkCasasAtacadas(board, jogadorAtual);
 
   const jogadorOposto =

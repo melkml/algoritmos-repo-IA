@@ -5,22 +5,24 @@ import {checkCasasAtacadas, checkPossiveisNos} from "../validation";
 export function clone(board: Board) {
   let boardClone = new Board();
 
-  const {casas, moveWR, moveBR, moveBTD, moveBTE, moveWTD, moveWTE, unPassantW, unPassantB} = JSON.parse(JSON.stringify(board));
-  
-  boardClone.casas = casas;
-  boardClone.moveWR = moveWR;
-  boardClone.moveBR = moveBR;
-  boardClone.moveBTD = moveBTD;
-  boardClone.moveBTE = moveBTE;
-  boardClone.moveWTD = moveWTD;
-  boardClone.moveWTE = moveWTE;
+  let tamanho = board.casas.length
 
-  if(unPassantW) {
-    boardClone.unPassantW = unPassantW;
+  for (let i = 0; i < tamanho; i++)
+    boardClone.casas[i] = board.casas[i].slice(0);
+
+  boardClone.moveWR = board.moveWR;
+  boardClone.moveBR = board.moveBR;
+  boardClone.moveBTD = board.moveBTD;
+  boardClone.moveBTE = board.moveBTE;
+  boardClone.moveWTD = board.moveWTD;
+  boardClone.moveWTE = board.moveWTE;
+
+  if(board.unPassantW) {
+    boardClone.unPassantW = board.unPassantW;
   }
 
-  if(unPassantB) {
-    boardClone.unPassantB = unPassantB;
+  if(board.unPassantB) {
+    boardClone.unPassantB = board.unPassantB;
   }
 
   return boardClone;

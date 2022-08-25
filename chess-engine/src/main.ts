@@ -51,6 +51,7 @@ function main() {
             printBoard(board.casas, Jogador["w"], true);
             console.log("Turno: Pretas");
 
+            console.timeEnd("Time:")
             jogadaEscolhida = checkJogador(jogadorHumano, jogadorAtual, board);
 
             if(jogadorHumano2) {
@@ -89,6 +90,7 @@ function main() {
 
         jogadorAtual = jogadorAtual === Jogador["w"] ? Jogador["b"] : Jogador["w"];
         console.clear();
+        console.timeEnd("Time:")
     }
 
     anunciarVencedor(jogadorAtual === Jogador["w"] ? Jogador["b"] : Jogador["w"]);

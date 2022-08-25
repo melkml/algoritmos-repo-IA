@@ -1,4 +1,4 @@
-import {mapPositions, material, printPieces, prtsMapPosition} from "../libs";
+import { mapPositions, material, prtsMapPosition} from "../libs";
 import {checkHeuristicaByPiecePosition} from "./check-heurist-by-piece";
 import {Board} from "../types";
 
@@ -14,8 +14,6 @@ export function calcularUtilidade(board: Board) {
                 continue;
             }
 
-            let value;
-
             if(board.casas[linha][coluna] > 6) {
                 valorHeuristicoByPiecePositionB += getValueHeuristicPiecePosition(board.casas[linha][coluna], [linha, coluna]) as number;
             }
@@ -25,7 +23,10 @@ export function calcularUtilidade(board: Board) {
             }
         }
 
-    return vantagemMaterial + valorHeuristicoByPiecePositionB + valorHeuristicoByPiecePositionW;
+    const valorPiecePosition = valorHeuristicoByPiecePositionW - valorHeuristicoByPiecePositionB;
+
+
+    return vantagemMaterial + valorPiecePosition;
 }
 
 function calcularVantagemMaterial(board: Board) {
@@ -47,7 +48,7 @@ function calcularVantagemMaterial(board: Board) {
     return materialW - materialB;
 }
 
- export function getValueHeuristicPiecePosition(piece: number, position: [number, number]): number | undefined {
+export function getValueHeuristicPiecePosition(piece: number, position: [number, number]): number | undefined {
     const [linhaDesejada, colunaDesejada] = position;
 
     for (let key = 0; key < prtsMapPosition.length; key++) {

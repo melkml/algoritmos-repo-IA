@@ -5,6 +5,7 @@
 *.txt
 *.xml
 *.iml
+.*
 
 # IDE - VSCode
 .vscode/*

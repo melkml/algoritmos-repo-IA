@@ -1,9 +1,8 @@
 import {checkXeque, clone, printBoard} from ".";
-import {Jogador, material, Pieces, Positions, Roque} from "../libs";
+import {Jogador, Pieces, Positions, random, Roque} from "../libs";
 import {Board} from "../types";
-import {checkPossiveisJogadasByPiece, checkPossiveisNos} from "../validation";
+import {checkPossiveisNos} from "../validation";
 import {calcularUtilidade} from "../evaluation";
-import * as util from "util";
 
 const promp = require("prompt-sync")();
 let maxDepth = 3;
@@ -13,9 +12,12 @@ export function IA(board: Board, jogadorAtual: number) {
   let utilidade = null;
   let melhorUtilidade = Infinity;
   let melhorJogada = null;
+  let utilidadesGeradas = [];
 
   for (const jogada of jogadasPossiveis) {
     utilidade = minmax(jogada, Jogador["w"], -Infinity, Infinity, 0);
+
+    utilidadesGeradas.push([utilidade, jogada]);
 
     if(utilidade < melhorUtilidade) {
       melhorUtilidade = utilidade;
@@ -23,6 +25,16 @@ export function IA(board: Board, jogadorAtual: number) {
     }
 
  }
+  const melhoresUtilidades = utilidadesGeradas.filter((tupla) => {
+    const [utilidade, jogada] = tupla;
+
+    return utilidade === melhorUtilidade;
+  });
+
+  if(melhoresUtilidades.length > 1) {
+    console.log("Sim");
+    return melhoresUtilidades[Math.floor(Math.random() * melhoresUtilidades.length)][1];
+  }
 
   return melhorJogada as Board;
 }
@@ -36,9 +48,7 @@ export function minmax(
 ): number {
 
   if (depth === maxDepth) {
-    const utilidade = calcularUtilidade(board) as number;
-
-    return utilidade;
+    return calcularUtilidade(board) as number;
   }
 
   let nodesPossiveis = checkPossiveisNos(board, jogadorAtual);

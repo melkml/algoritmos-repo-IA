@@ -257,16 +257,16 @@ checkPositionValid[Pieces["bC"]] = (
 
   // Esquerda pra cima
   if (
-    linhaDestino === linhaOrigem - 1 &&
-    colunaDestino === colunaOrigem + 2 &&
+    linhaDestino === linhaOrigem + 1 &&
+    colunaDestino === colunaOrigem - 2 &&
     board[linhaDestino][colunaDestino] < 7 &&
     board[linhaDestino][colunaDestino] !== -1
   ) {
     return true;
   }
   if (
-    linhaDestino === linhaOrigem - 2 &&
-    colunaDestino === colunaOrigem + 1 &&
+    linhaDestino === linhaOrigem + 2 &&
+    colunaDestino === colunaOrigem - 1 &&
     board[linhaDestino][colunaDestino] < 7 &&
     board[linhaDestino][colunaDestino] !== -1
   ) {
@@ -294,8 +294,8 @@ checkPositionValid[Pieces["bC"]] = (
 
   // Direita pra baixo
   if (
-    linhaDestino === linhaOrigem + 1 &&
-    colunaDestino === colunaOrigem - 2 &&
+    linhaDestino === linhaOrigem - 1 &&
+    colunaDestino === colunaOrigem + 2 &&
     board[linhaDestino][colunaDestino] < 7 &&
     board[linhaDestino][colunaDestino] !== -1
   ) {
@@ -303,8 +303,8 @@ checkPositionValid[Pieces["bC"]] = (
   }
 
   if (
-    linhaDestino === linhaOrigem + 2 &&
-    colunaDestino === colunaOrigem - 1 &&
+    linhaDestino === linhaOrigem - 2 &&
+    colunaDestino === colunaOrigem + 1 &&
     board[linhaDestino][colunaDestino] < 7 &&
     board[linhaDestino][colunaDestino] !== -1
   ) {

@@ -1,5 +1,5 @@
 import {checkXeque, clone, printBoard} from ".";
-import {Jogador, Pieces, Positions, random, Roque} from "../libs";
+import {Jogador, Pieces, Positions, Roque} from "../libs";
 import {Board} from "../types";
 import {checkPossiveisNos} from "../validation";
 import {calcularUtilidade} from "../evaluation";

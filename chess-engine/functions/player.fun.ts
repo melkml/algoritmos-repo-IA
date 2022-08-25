@@ -95,8 +95,13 @@ export function minmax(
 
 export function humano(board: Board, jogador: number): any {
   let jogada: string = "";
+  console.clear();
+
 
   while (true) {
+
+    printBoard(board.casas, jogador, true);
+
     console.log(
       "Digite a sua jogada ou 's' para desistir e sair (digite 'help' se precisar de ajuda com os movimentos): "
     );
@@ -112,6 +117,7 @@ export function humano(board: Board, jogador: number): any {
     }
 
     if (jogada === "help") {
+      console.clear();
       console.log(
         "Sintaxe das movimentações: <posição-origem>-<posição-destino>"
       );

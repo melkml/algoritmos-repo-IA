@@ -95,8 +95,6 @@ export function minmax(
 
 export function humano(board: Board, jogador: number): any {
   let jogada: string = "";
-  console.clear();
-
 
   while (true) {
 

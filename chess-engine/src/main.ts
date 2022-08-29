@@ -21,6 +21,7 @@ let jogadorHumano2: number = 0;
 let resultFinal = false;
 
 function main() {
+    console.clear();
     while (!resultFinal) {
         if (jogadorAtual === Jogador["w"]) {
             console.log("Turno: Brancas");
@@ -96,23 +97,6 @@ function main() {
 }
 //? Main
 newGame(board.casas);
-
-board.casas[5][6] = board.casas[3][6];
-board.casas[7][4] = board.casas[9][3];
-board.casas[4][4] = board.casas[2][3];
-board.casas[6][6] = board.casas[8][6];
-board.casas[5][4] = board.casas[2][7];
-board.casas[6][4] = board.casas[9][7];
-board.casas[4][7] = board.casas[2][8];
-board.casas[7][7] = board.casas[9][8];
-board.casas[3][6] = Pieces["--"];
-board.casas[9][3] = Pieces["--"];
-board.casas[2][3] = Pieces["--"];
-board.casas[8][6] = Pieces["--"];
-board.casas[2][7] = Pieces["--"];
-board.casas[9][7] = Pieces["--"];
-board.casas[2][8] = Pieces["--"];
-board.casas[9][8] = Pieces["--"];
 
 main();
 

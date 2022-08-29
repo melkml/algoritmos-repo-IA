@@ -1,4 +1,4 @@
-# Dependências
+## Dependências
 
 > - ```npm install prompt-sync```
 >  

@@ -130,7 +130,7 @@ Por exemplo, um cavalo possui mais valor se estiver no centro do tabuleiro
 do que se estiver nas bordas do tabuleiro. Nesse projeto, chamaremos
 tal valoração como **Valor Peça-Posição**.
 
-O valor peça-posição é um critério de avaliação de tabuleira 
+O valor peça-posição é um critério de avaliação de tabuleiro 
 onde faz-se uso uma tabela para cada peça de cada cor e, para cada casa do
 tabuleiro, define um valor. A pontuação deste critério é a soma destes valores [[4]](https://bcc.ime.usp.br/tccs/2014/hvmds/Monografia.pdf).
 Nesse motor de xadrez, as tabelas para cada peça foram determinadas da seguinte forma

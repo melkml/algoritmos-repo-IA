@@ -98,7 +98,7 @@ a subtração da soma dos valores das peças brancas com
 a soma dos valores das peças pretas.
 
 Nesse motor de xadrez, a valoração
-das peças está definida (brancas e pretas) da seguinte forma:
+das peças (brancas e pretas) está definida da seguinte forma:
 
 
 | Peça   | Valor |

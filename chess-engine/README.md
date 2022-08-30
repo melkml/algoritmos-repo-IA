@@ -46,7 +46,7 @@ recebe o valor "infinito negativo" e beta, "infinito positivo".
 
 O exemplo abaixo demonstra, de uma forma simples, o princípio matemático presente no funcionamento da poda α-β.
 
-![Poda Alfa-Beta](/images/min-max-alpha-beta-prunning-math.jpg)
+![Poda Alfa-Beta](./images/min-max-alpha-beta-prunning-math.jpg)
 
 Note que, independente do valor de `x` e `y` o resultado da equação é o mesmo [[2]](https://pt.wikipedia.org/wiki/Poda_(computa%C3%A7%C3%A3o)).
 ##### Pseudocódigo
@@ -112,7 +112,7 @@ das peças está definida (brancas e pretas) da seguinte forma:
 
 e o cálculo da vantagem material está definida como:
 
-![Calculo Vantagem Material](/images/calculo-vantagem-material.jpg)
+![Calculo Vantagem Material](./images/calculo-vantagem-material.jpg)
 
 onde:
 - `p` é um tipo de peça
@@ -136,7 +136,7 @@ como está especificado em [[5]](https://www.chessprogramming.org/Simplified_Eva
 O cálculo do Valor Peça-Posição é definido, portanto, 
 como:
 
-![Cálculo do Valor Peça-Posição](/images/calculo-valor-peca-posicao.jpg)
+![Cálculo do Valor Peça-Posição](./images/calculo-valor-peca-posicao.jpg)
 
 onde:
 
@@ -151,7 +151,7 @@ Portando, dado conhecimento da Vantagem Material e do Valor Peça-Posição,
 o cálculo feito para o valor utilidade (U) de uma determinada configuração de tabuleira
 é definida como:
 
-![Calculo da Utilidade](/images/calculo_utilidade.jpg)
+![Calculo da Utilidade](./images/calculo_utilidade.jpg)
 
 
 

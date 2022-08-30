@@ -148,7 +148,7 @@ onde:
 #### Cálculo da Utilidade
 
 Portando, dado conhecimento da Vantagem Material e do Valor Peça-Posição,
-o cálculo feito para o valor utilidade (U) de uma determinada configuração de tabuleira
+o cálculo feito para o valor utilidade (U) de uma determinada configuração de tabuleiro
 é definida como:
 
 ![Calculo da Utilidade](./images/calculo_utilidade.jpg)

@@ -21,7 +21,7 @@ Para iniciar uma partida do xadrez, digite ```yarn dev``` no terminal.
 
 ![Exemplo da indexação do tabuleiro 12 × 12. As casas com valor -1 não são válidas.](images/board-12x12.jpg)
 
-A representação é feita através de um tabuleiro 12 × 12. Esta representação adiciona
+A representação é feita através de uma matriz 12 × 12. Esta representação adiciona
 duas linhas e duas colunas nas bordas do tabuleiro 8 × 8. Esta borda, que representa as casas fora do
 tabuleiro, é necessária para verificar se o movimento é válido. Duas colunas ou linhas, em vez de uma, são
 necessárias para garantir a verificação do movimento do cavalo. Na fase de geração do movimento, se o

@@ -77,7 +77,7 @@ function minimax(node, depth, isMaximizingPlayer, alpha, beta):
         return bestVal
 ```
 
-Nesse projeto, o motor de xadrez foi definido como MIN e o jogador humano como Max. Além disso,
+Nesse projeto, o motor de xadrez foi definido como `MIN` e o jogador humano como `MAX`. Além disso,
 foi utilizado uma profundidade de 3 nivéis para a expansão da árvore de escolha do algoritmo.
 
 ### Função Heurística

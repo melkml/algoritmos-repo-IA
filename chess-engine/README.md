@@ -77,7 +77,8 @@ function minimax(node, depth, isMaximizingPlayer, alpha, beta):
         return bestVal
 ```
 
-Nesse projeto, foi utilizado uma profundidade de 3 nivéis para a expansão da árvore de escolha no MinMax Alpha Beta Prunning.
+Nesse projeto, o motor de xadrez foi definido como MIN e o jogador humano como Max. Além disso,
+foi utilizado uma profundidade de 3 nivéis para a expansão da árvore de escolha do algoritmo.
 
 ### Função Heurística
 Uma função heurística, também chamada simplesmente de heurística, 

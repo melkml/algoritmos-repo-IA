@@ -77,6 +77,8 @@ function minimax(node, depth, isMaximizingPlayer, alpha, beta):
         return bestVal
 ```
 
+Nesse projeto, foi utilizado uma profundidade de 3 nivéis para a expansão da árvore de escolha no MinMax Alpha Beta Prunning.
+
 ### Função Heurística
 Uma função heurística, também chamada simplesmente de heurística, 
 é uma função que classifica alternativas em algoritmos de pesquisa

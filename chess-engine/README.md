@@ -1,6 +1,6 @@
 ## Especificações Ténicas
 
-Nesse projeto, foi construído é um motor de xadrez simples para terminal
+Nesse projeto, foi construído um motor de xadrez simples para terminal
 escrito 100% em `Typescript` no `NodeJS` utilizando
 o gerenciador de pacotes e dependências `Yarn`.
 

@@ -118,7 +118,7 @@ e o cálculo da vantagem material está definida como:
 
 onde:
 - `p` é um tipo de peça
-- `n` é a peça rainha
+- `n` é a última peça avaliada
 - `Vwp` é o valor de uma peça branca
 - `Vbp` é o valor de uma peça preta
 
@@ -143,7 +143,7 @@ como:
 onde:
 
 - `p` é um tipo de peça
-- `n` é a peça rainha
+- `n` é a última peça avaliada
 - `Vw(p,pos)` é o valor de uma peça branca dado sua posição
 - `Vb(p,pos)` é o valor de uma peça preta dado sua posição.
 

@@ -94,9 +94,8 @@ descrita como a soma de dois critérios de valoração: **Vantagem Material** e 
 
 #### Vantagem Material
 
-A vantagem material é um indicador no xadrez que determina qual dos dois jogadores está com maiores
-chances de vencer uma partida.
-Nela, é atribuído valores para cada tipo de peça de xadrez e, após isso, é realizado
+A vantagem material é um indicador no xadrez que determina a diferença da quantidades de peças em uma determinada
+configuração de tabuleiro. Nela, é atribuído valores para cada tipo de peça de xadrez e, após isso, é realizado
 a subtração da soma dos valores das peças brancas com
 a soma dos valores das peças pretas.
 
